@@ -1,0 +1,2253 @@
+================================================================================
+제어명세서 (Control Specification)
+================================================================================
+【 이 파일에 제어 정보를 입력하면 AI가 자동으로 코드를 생성합니다 】
+
+사용 방법:
+1. 아래 템플릿을 복사하여 제어 항목을 추가합니다
+2. 워드주소, 비트번호, 값 등을 정확히 입력합니다
+3. AI에게 "제어명세서 기반으로 코드 생성해줘"라고 요청합니다
+
+
+연결 정보
+================================================================================
+IP: 168.131.153.52
+도메인: -
+PORT: 9139
+UNIT_ID: 1
+
+
+================================================================================
+워드주소 0~84 제어 명세 (주소 순서대로 정렬)
+================================================================================
+
+[IO보드국번]
+# English: io_board_station_number
+타입: REGISTER_WRITE
+워드주소: 0
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: -
+설명: IO보드 국번
+
+[PCB주위온열편구능등설정온도]
+타입: REGISTER_WRITE
+워드주소: 1
+비트번호: 0~15
+값범위: -550~999
+변환식: value / 10
+단위: °C
+설명: PCB 주위온도 설정 (-55.0 ~ 99.9도)
+
+[프로그램정교조정비밀번호]
+타입: REGISTER_WRITE
+워드주소: 2
+비트번호: 0~15
+값범위: 0~9999
+변환식: value
+단위: -
+설명: 프로그램 정교조정 비밀번호 (0000 ~ 9999)
+
+[센서값저장주기]
+# English: sensor_save_interval
+타입: REGISTER_WRITE
+워드주소: 3
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: 분
+설명: 센서값 저장주기 (분 단위)
+
+[센서기록시유닛포함여부]
+타입: BIT_WRITE
+워드주소: 4
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 센서기록 시 유닛포함 여부 (0:미포함, 1:포함)
+
+[센서기록파일타입]
+타입: BIT_WRITE
+워드주소: 4
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 센서기록파일타입 (0:txt, 1:csv)
+
+[비밀번호사용유무]
+타입: BIT_WRITE
+워드주소: 4
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 비밀번호사용유무 (1:사용X, 0:사용)
+
+[유동팬ON설정온도]
+타입: REGISTER_WRITE
+워드주소: 5
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: °C
+설명: 유동팬 ON설정온도
+
+[유동팬OFF설정온도]
+타입: REGISTER_WRITE
+워드주소: 6
+비트번호: 0~15
+값범위: -550~999
+변환식: value / 10
+단위: °C
+설명: 유동팬 OFF설정온도
+
+[유동팬ON설정습도]
+타입: REGISTER_WRITE
+워드주소: 7
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: %
+설명: 유동팬 ON설정습도
+
+[유동팬OFF설정습도]
+타입: REGISTER_WRITE
+워드주소: 8
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: %
+설명: 유동팬 OFF설정습도
+
+[유동팬OFF시간]
+# English: circulation_fan_off_time
+타입: BIT_RANGE_WRITE
+워드주소: 9
+비트번호: 11~15
+값범위: 0~31
+변환식: bit_range_value
+단위: -
+설명: 유동팬 OFF시간
+
+[유동팬시간조절사용]
+타입: BIT_WRITE
+워드주소: 9
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬시간조절 사용
+
+[유동팬습도조절사용]
+타입: BIT_WRITE
+워드주소: 9
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬습도조절 사용
+
+[유동팬온도조절사용]
+타입: BIT_WRITE
+워드주소: 9
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬 온도조절 사용
+
+[유동팬온시간]
+# English: circulation_fan_on_time
+타입: BIT_RANGE_WRITE
+워드주소: 9
+비트번호: 2~7
+값범위: 0~63
+변환식: bit_range_value
+단위: -
+설명: 유동팬 온시간
+
+[유동팬강제운전]
+# English: circulation_fan_forced_operation
+타입: BIT_WRITE
+워드주소: 9
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬강제운전
+
+[유동팬오토모드]
+# English: circulation_fan_auto_mode
+타입: BIT_WRITE
+워드주소: 9
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬오토모드
+
+[함수율에의한관수설정값]
+타입: BIT_RANGE_WRITE
+워드주소: 10
+비트번호: 8~15
+값범위: 0~255
+변환식: bit_range_value
+단위: -
+설명: 함수율에 의한 관수 설정값
+
+[관수시작시각_시]
+타입: BIT_RANGE_WRITE
+워드주소: 10
+비트번호: 2~7
+값범위: 0~63
+변환식: bit_range_value
+단위: 시
+설명: 관수 시작시각(시)
+
+[관수강제운전]
+# English: irrigation_forced_operation
+타입: BIT_WRITE
+워드주소: 10
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수강제운전
+
+[관수오토모드]
+# English: irrigation_auto_mode
+타입: BIT_WRITE
+워드주소: 10
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수오토모드
+
+[관수OFF시간_분]
+타입: BIT_RANGE_WRITE
+워드주소: 11
+비트번호: 9~15
+값범위: 0~127
+변환식: bit_range_value
+단위: 분
+설명: 관수 OFF시간(분)
+
+[관수ON_OFF타임유닛]
+타입: BIT_WRITE
+워드주소: 11
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수ON/OFF 타임유닛
+
+[관수ON시간_분]
+타입: BIT_RANGE_WRITE
+워드주소: 11
+비트번호: 1~7
+값범위: 0~127
+변환식: bit_range_value
+단위: 분
+설명: 관수 ON시간(분)
+
+[관수센서조건사용]
+타입: BIT_WRITE
+워드주소: 11
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수 센서조건 사용
+
+[관수종료시각_시]
+타입: BIT_RANGE_WRITE
+워드주소: 12
+비트번호: 10~15
+값범위: 0~63
+변환식: bit_range_value
+단위: 시
+설명: 관수 종료시각(시)
+
+[관수반복회수]
+# English: irrigation_repeat_count
+타입: BIT_RANGE_WRITE
+워드주소: 12
+비트번호: 6~9
+값범위: 0~15
+변환식: bit_range_value
+단위: 회
+설명: 관수 반복회수
+
+[다음관수일설정]
+타입: BIT_RANGE_WRITE
+워드주소: 12
+비트번호: 0~5
+값범위: 0~63
+변환식: bit_range_value
+단위: 일
+설명: 다음관수 일 설정
+
+[수분장력설정]
+# English: soil_tension_setting
+타입: BIT_RANGE_WRITE
+워드주소: 13
+비트번호: 8~15
+값범위: 0~255
+변환식: bit_range_value
+단위: -
+설명: 수분장력설정
+
+[수분장력사용]
+# English: soil_tension_enable
+타입: BIT_WRITE
+워드주소: 13
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 수분장력사용
+
+[관수시작시각_분]
+타입: BIT_RANGE_WRITE
+워드주소: 13
+비트번호: 0~5
+값범위: 0~63
+변환식: bit_range_value
+단위: 분
+설명: 관수 시작시각(분)
+
+[난방ON습도설정]
+# English: heating_on_humidity_setting
+타입: BIT_RANGE_WRITE
+워드주소: 14
+비트번호: 2~15
+값범위: 0~16383
+변환식: bit_range_value
+단위: -
+설명: 난방 ON 습도설정값
+
+[난방강제운전]
+# English: heating_forced_operation
+타입: BIT_WRITE
+워드주소: 14
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방강제운전
+
+[난방오토모드]
+# English: heating_auto_mode
+타입: BIT_WRITE
+워드주소: 14
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방오토모드
+
+[난방OFF습도설정]
+# English: heating_off_humidity_setting
+타입: BIT_RANGE_WRITE
+워드주소: 15
+비트번호: 2~15
+값범위: 0~16383
+변환식: bit_range_value
+단위: -
+설명: 난방 OFF 습도설정값
+
+[난방습도조건사용]
+# English: heating_humidity_condition_enable
+타입: BIT_WRITE
+워드주소: 15
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방습도조건사용
+
+[난방온도조건사용]
+# English: heating_temperature_condition_enable
+타입: BIT_WRITE
+워드주소: 15
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방온도조건사용
+
+[난방ON온도설정]
+# English: heating_on_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 16
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 난방 ON 온도설정값
+
+[난방OFF온도설정]
+# English: heating_off_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 17
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 난방 OFF 온도설정값
+
+[제습ON설정]
+# English: dehumidifier_on_setting
+타입: BIT_RANGE_WRITE
+워드주소: 18
+비트번호: 1~15
+값범위: 0~32767
+변환식: bit_range_value
+단위: -
+설명: 제습 ON설정값
+
+[제습오토모드]
+# English: dehumidifier_auto_mode
+타입: BIT_WRITE
+워드주소: 18
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 제습오토모드
+
+[제습OFF설정]
+# English: dehumidifier_off_setting
+타입: BIT_RANGE_WRITE
+워드주소: 19
+비트번호: 1~15
+값범위: 0~32767
+변환식: bit_range_value
+단위: -
+설명: 제습 OFF설정값
+
+[제습강제운전]
+# English: dehumidifier_forced_operation
+타입: BIT_WRITE
+워드주소: 19
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 제습강제운전
+
+[우측닫기모드]
+# English: right_close_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 우측닫기모드
+
+[우측열기모드]
+# English: right_open_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 우측열기모드
+
+[우측오토모드]
+# English: right_auto_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 우측오토모드
+
+[좌측닫기모드]
+# English: left_close_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 좌측닫기모드
+
+[좌측열기모드]
+# English: left_open_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 좌측열기모드
+
+[좌측오토모드]
+# English: left_auto_mode
+타입: BIT_WRITE
+워드주소: 20
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 좌측오토모드
+
+[천장고습열림설정]
+# English: roof_high_humidity_open_setting
+타입: BIT_RANGE_WRITE
+워드주소: 20
+비트번호: 0~9
+값범위: 0~1023
+변환식: bit_range_value
+단위: -
+설명: 천장 고습열림 설정값
+
+[사용안함일때비오면닫기]
+# English: close_on_rain_when_disabled
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 사용안함일때 비오면 닫기기능
+
+[강제열기일때비오면닫기]
+# English: close_on_rain_when_forced_open
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 강제열기일때 비오면 닫기기능
+
+[천장개폐온도차조건사용]
+# English: roof_temperature_diff_condition_enable
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장개폐 온도차조건사용
+
+[천장개폐습도조건사용]
+# English: roof_humidity_condition_enable
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장개폐 습도조건사용
+
+[천장개폐온도조건사용]
+# English: roof_temperature_condition_enable
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장개폐 온도조건사용
+
+[천장개폐풍속조건사용]
+# English: roof_wind_speed_condition_enable
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장개폐 풍속조건 사용
+
+[천장개폐시간조건사용]
+# English: roof_time_condition_enable
+타입: BIT_WRITE
+워드주소: 21
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장개폐 시간조건 사용
+
+[열기닫기편차온도]
+# English: open_close_temperature_deviation
+타입: BIT_RANGE_WRITE
+워드주소: 21
+비트번호: 0~8
+값범위: 0~511
+변환식: bit_range_value
+단위: -
+설명: 열기닫기 편차온도
+
+[고습열림설정값]
+# English: high_humidity_open_setting_value
+타입: REGISTER_WRITE
+워드주소: 22
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: %
+설명: 고습열림 설정값
+
+[온도차조건열기닫기편차온도]
+# English: temperature_diff_open_close_deviation
+타입: REGISTER_WRITE
+워드주소: 23
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 온도차 조건 사용시 열기 닫기 편차온도
+
+[온도차열기설정값]
+# English: temperature_diff_open_setting_value
+타입: REGISTER_WRITE
+워드주소: 24
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 온도차 열기 설정값
+
+[열림설정온도]
+# English: open_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 25
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 열림 설정온도
+
+[닫힘설정온도]
+# English: close_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 26
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 닫힘 설정온도
+
+[천장개폐닫힘시간]
+# English: roof_close_time
+타입: BIT_RANGE_WRITE
+워드주소: 27
+비트번호: 8~15
+값범위: 0~255
+변환식: bit_range_value
+단위: -
+설명: 천장개폐 닫힘시간
+
+[천장개폐열림시간]
+# English: roof_open_time
+타입: BIT_RANGE_WRITE
+워드주소: 27
+비트번호: 0~7
+값범위: 0~255
+변환식: bit_range_value
+단위: -
+설명: 천장개폐 열림시간
+
+[사용안함일때강풍이면닫기사용]
+# English: close_on_strong_wind_when_disabled
+타입: BIT_WRITE
+워드주소: 28
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 사용안함일 때 강풍이면 닫기사용
+
+[강풍닫기편차]
+# English: strong_wind_close_deviation
+타입: BIT_RANGE_WRITE
+워드주소: 28
+비트번호: 8~14
+값범위: 0~127
+변환식: bit_range_value
+단위: -
+설명: 강풍닫기 편차
+
+[강제열기일때강풍이면닫기사용]
+# English: close_on_strong_wind_when_forced_open
+타입: BIT_WRITE
+워드주소: 28
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 강제열기일 때 강풍이면 닫기사용
+
+[강풍닫기설정풍속]
+# English: strong_wind_close_wind_speed_setting
+타입: BIT_RANGE_WRITE
+워드주소: 28
+비트번호: 0~6
+값범위: 0~127
+변환식: bit_range_value
+단위: -
+설명: 강풍닫기 설정풍속
+
+[보온커튼시간조건사용]
+# English: insulation_curtain_time_condition_enable
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 보온커튼시간조건사용
+
+[보온커튼온도조건사용]
+# English: insulation_curtain_temperature_condition_enable
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 보온커튼온도조건사용
+
+[사용안함_29]
+# English: unused_29
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 사용안함
+
+[보온커튼닫힘시각]
+# English: insulation_curtain_close_time
+타입: BIT_RANGE_WRITE
+워드주소: 29
+비트번호: 8~12
+값범위: 0~31
+변환식: bit_range_value
+단위: 시
+설명: 보온커튼 닫힘 시각
+
+[상부보온커튼닫기모드]
+# English: upper_insulation_curtain_close_mode
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 상부보온커튼 닫기모드
+
+[상부보온커튼열기모드]
+# English: upper_insulation_curtain_open_mode
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 상부보온커튼 열기모드
+
+[상부보온커튼오토모드]
+# English: upper_insulation_curtain_auto_mode
+타입: BIT_WRITE
+워드주소: 29
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 상부보온커튼 오토모드
+
+[보온커튼열림시각]
+# English: insulation_curtain_open_time
+타입: BIT_RANGE_WRITE
+워드주소: 29
+비트번호: 0~4
+값범위: 0~31
+변환식: bit_range_value
+단위: 시
+설명: 보온커튼 열림시각
+
+[사용안함_30]
+# English: unused_30
+타입: BIT_RANGE_WRITE
+워드주소: 30
+비트번호: 3~15
+값범위: 0~8191
+변환식: bit_range_value
+단위: -
+설명: 사용안함
+
+[측면보온커튼닫기모드]
+# English: side_insulation_curtain_close_mode
+타입: BIT_WRITE
+워드주소: 30
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 측면보온커튼 닫기모드
+
+[측면보온커튼열기모드]
+# English: side_insulation_curtain_open_mode
+타입: BIT_WRITE
+워드주소: 30
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 측면보온커튼 열기모드
+
+[측면보온커튼오토모드]
+# English: side_insulation_curtain_auto_mode
+타입: BIT_WRITE
+워드주소: 30
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 측면보온커튼 오토모드
+
+[보온커튼열림온도설정]
+# English: insulation_curtain_open_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 31
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 보온커튼 열림온도설정
+
+[보온커튼닫힘온도설정]
+# English: insulation_curtain_close_temperature_setting
+타입: REGISTER_WRITE
+워드주소: 32
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 보온커튼 닫힘온도설정
+
+[보온커튼열기닫기편차온도]
+# English: insulation_curtain_open_close_temperature_deviation
+타입: REGISTER_WRITE
+워드주소: 33
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 보온커튼 열기닫기 편차온도
+
+[상부보온커튼전체이동시간설정]
+# English: upper_insulation_curtain_total_travel_time_setting
+타입: REGISTER_WRITE
+워드주소: 34
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: 초
+설명: 상부보온커튼 전체이동시간 설정
+
+[상부보온커튼열림제한비율]
+# English: upper_insulation_curtain_open_limit_ratio
+타입: REGISTER_WRITE
+워드주소: 35
+비트번호: 0~15
+값범위: 0~100
+변환식: value
+단위: %
+설명: 상부보온커튼 열림제한비율
+
+[측면보온커튼전체이동시간설정]
+# English: side_insulation_curtain_total_travel_time_setting
+타입: REGISTER_WRITE
+워드주소: 36
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: 초
+설명: 측면보온커튼 전체이동시간 설정
+
+[측면보온커튼열림제한비율]
+# English: side_insulation_curtain_open_limit_ratio
+타입: REGISTER_WRITE
+워드주소: 37
+비트번호: 0~15
+값범위: 0~100
+변환식: value
+단위: %
+설명: 측면보온커튼 열림제한비율
+
+[차광커튼시간조건사용]
+# English: shading_curtain_time_condition_enable
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광커튼시간조건사용
+
+[차광커튼온도조건사용]
+# English: shading_curtain_temperature_condition_enable
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광커튼온도조건사용
+
+[사용안함_38]
+# English: unused_38
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 사용안함
+
+[차광커튼닫힘시각]
+# English: shading_curtain_close_time
+타입: BIT_RANGE_WRITE
+워드주소: 38
+비트번호: 8~12
+값범위: 0~31
+변환식: bit_range_value
+단위: 시
+설명: 차광커튼 닫힘시각
+
+[차광커튼닫기모드]
+# English: shading_curtain_close_mode
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광커튼 닫기모드
+
+[차광커튼열기모드]
+# English: shading_curtain_open_mode
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광커튼 열기모드
+
+[차광커튼오토모드]
+# English: shading_curtain_auto_mode
+타입: BIT_WRITE
+워드주소: 38
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광커튼 오토모드
+
+[차광커튼열림시각]
+# English: shading_curtain_open_time
+타입: BIT_RANGE_WRITE
+워드주소: 38
+비트번호: 0~4
+값범위: 0~31
+변환식: bit_range_value
+단위: 시
+설명: 차광커튼 열림시각
+
+[일사센서조건사용]
+# English: solar_radiation_sensor_condition_enable
+타입: BIT_WRITE
+워드주소: 39
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 일사센서조건사용
+
+[차광커튼전체이동시간]
+# English: shading_curtain_total_travel_time
+타입: BIT_RANGE_WRITE
+워드주소: 39
+비트번호: 0~14
+값범위: 0~32767
+변환식: bit_range_value
+단위: 초
+설명: 차광커튼 전체이동시간
+
+[차광커튼고온열림설정온도]
+# English: shading_curtain_high_temperature_open_setting
+타입: REGISTER_WRITE
+워드주소: 40
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 차광커튼 고온열림 설정온도
+
+[차광커튼닫힘일사량설정]
+# English: shading_curtain_close_solar_radiation_setting
+타입: REGISTER_WRITE
+워드주소: 41
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 차광커튼 닫힘일사량 설정
+
+[차광커튼일사센서열기닫기편차값]
+# English: shading_curtain_solar_sensor_open_close_deviation
+타입: REGISTER_WRITE
+워드주소: 42
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 차광커튼 일사센서에 의한 열기 닫기 편차값
+
+[차광커튼고온열기닫기편차값]
+# English: shading_curtain_high_temp_open_close_deviation
+타입: REGISTER_WRITE
+워드주소: 43
+비트번호: 0~15
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 차광커튼 고온에 의한 열기 닫기 편차값
+
+[차광커튼열림제한비율]
+# English: shading_curtain_open_limit_ratio
+타입: REGISTER_WRITE
+워드주소: 44
+비트번호: 0~15
+값범위: 0~100
+변환식: value
+단위: %
+설명: 차광커튼 열림제한비율
+
+[조명온시각분]
+# English: lighting_on_time_minute
+타입: BIT_RANGE_WRITE
+워드주소: 45
+비트번호: 8~15
+값범위: 0~255
+변환식: bit_range_value
+단위: 분
+설명: 조명 온시각 분
+
+[조명온시각시]
+# English: lighting_on_time_hour
+타입: BIT_RANGE_WRITE
+워드주소: 45
+비트번호: 1~7
+값범위: 0~127
+변환식: bit_range_value
+단위: 시
+설명: 조명 온시각 시
+
+[조명오토모드]
+# English: lighting_auto_mode
+타입: BIT_WRITE
+워드주소: 45
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 조명오토모드
+
+[조명오프시각분]
+# English: lighting_off_time_minute
+타입: BIT_RANGE_WRITE
+워드주소: 46
+비트번호: 8~15
+값범위: 0~255
+변환식: bit_range_value
+단위: 분
+설명: 조명 오프시각 분
+
+[조명오프시각시]
+# English: lighting_off_time_hour
+타입: BIT_RANGE_WRITE
+워드주소: 46
+비트번호: 1~7
+값범위: 0~127
+변환식: bit_range_value
+단위: 시
+설명: 조명 오프시각 시
+
+[조명강제운전]
+# English: lighting_forced_operation
+타입: BIT_WRITE
+워드주소: 46
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 조명강제운전
+
+[내부온도센서보정값]
+# English: internal_temperature_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 47
+비트번호: 0~15
+값범위: -550~999
+변환식: value / 10
+단위: °C
+설명: 내부온도 센서 보정값
+
+[내부습도센서보정값]
+# English: internal_humidity_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 48
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: %
+설명: 내부습도 센서 보정값
+
+[내부일사센서보정값]
+# English: internal_solar_radiation_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 49
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 내부 일사센서 보정값
+
+[내부함수율센서보정값]
+# English: internal_moisture_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 50
+비트번호: 0~15
+값범위: 0~100
+변환식: value
+단위: %
+설명: 내부 함수율 센서 보정값
+
+[내부수분장력센서보정값]
+# English: internal_soil_tension_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 51
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: kPa
+설명: 내부 수분장력센서 보정값
+
+[외부온도센서보정값]
+# English: external_temperature_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 52
+비트번호: 0~15
+값범위: -550~999
+변환식: value / 10
+단위: °C
+설명: 외부온도센서 보정값
+
+[외부습도센서보정값]
+# English: external_humidity_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 53
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: %
+설명: 외부습도센서 보정값
+
+[외부일사센서보정값]
+# English: external_solar_radiation_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 54
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 외부 일사센서 보정값
+
+[외부풍향센서보정값]
+# English: external_wind_direction_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 55
+비트번호: 0~15
+값범위: 0~360
+변환식: value
+단위: °
+설명: 외부 풍향센서 보정값
+
+[외부풍속센서보정값]
+# English: external_wind_speed_sensor_calibration
+타입: REGISTER_WRITE
+워드주소: 56
+비트번호: 0~15
+값범위: 0~999
+변환식: value / 10
+단위: m/s
+설명: 외부 풍속센서 보정값
+
+[외부센서통신주소]
+# English: external_sensor_communication_address
+타입: BIT_RANGE_WRITE
+워드주소: 57
+비트번호: 8~15
+값범위: 1~247
+변환식: bit_range_value
+단위: -
+설명: 외부센서 통신주소
+
+[내부센서통신주소]
+# English: internal_sensor_communication_address
+타입: BIT_RANGE_WRITE
+워드주소: 57
+비트번호: 0~7
+값범위: 1~247
+변환식: bit_range_value
+단위: -
+설명: 내부센서 통신주소
+
+[reserved_58]
+# English: reserved_58
+타입: REGISTER_WRITE
+워드주소: 58
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: -
+설명: reserved
+
+[reserved_59]
+# English: reserved_59
+타입: REGISTER_WRITE
+워드주소: 59
+비트번호: 0~15
+값범위: 0~65535
+변환식: value
+단위: -
+설명: reserved
+
+[IO보드통신체크]
+# English: io_board_communication_check
+타입: REGISTER_WRITE
+워드주소: 60
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: -
+설명: IO보드와의 통신 체크 (100 되면 연결이 끊어진 것)
+
+[PCB주위현재온도]
+# English: pcb_current_temperature
+타입: REGISTER_READ
+워드주소: 61
+비트번호: -
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: PCB 주위 현재온도
+
+[현재시각_시]
+# English: current_time_hour
+타입: REGISTER_READ
+워드주소: 62
+비트번호: -
+값범위: 0~23
+변환식: value
+단위: 시
+설명: 현재시각 (시)
+
+[현재시각_분]
+# English: current_time_minute
+타입: REGISTER_READ
+워드주소: 63
+비트번호: -
+값범위: 0~59
+변환식: value
+단위: 분
+설명: 현재 분
+
+[현재시각_초]
+# English: current_time_second
+타입: REGISTER_READ
+워드주소: 64
+비트번호: -
+값범위: 0~59
+변환식: value
+단위: 초
+설명: 현재 초
+
+[유동팬습도조건출력중]
+# English: circulation_fan_humidity_condition_output_active
+타입: BIT_READ
+워드주소: 65
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬습도조건에 의한 출력중
+
+[유동팬온도조건출력중]
+# English: circulation_fan_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 65
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬온도조건에 의한 출력중
+
+[차광열림출력표시]
+# English: shading_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광 열림출력 표시
+
+[차광닫힘출력표시]
+# English: shading_close_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광 닫힘출력 표시
+
+[상부보온열림출력표시]
+# English: upper_insulation_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 상부보온 열림출력 표시
+
+[상부보온닫힘출력표시]
+# English: upper_insulation_close_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 상부보온 닫힘출력 표시
+
+[천장우단열림출력표시]
+# English: roof_right_end_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우단 열림출력 표시
+
+[천장우열림출력표시]
+# English: roof_right_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우 열림출력 표시
+
+[천장좌단열림출력표시]
+# English: roof_left_end_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌단 열림출력 표시
+
+[천장좌열림출력표시]
+# English: roof_left_open_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌 열림출력 표시
+
+[제습출력표시]
+# English: dehumidifier_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 제습출력 표시
+
+[난방출력표시]
+# English: heating_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 4
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방출력 표시
+
+[관수출력표시]
+# English: irrigation_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 3
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수출력 표시
+
+[유동팬출력표시]
+# English: circulation_fan_output_indicator
+타입: BIT_READ
+워드주소: 65
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬출력 표시
+
+[PCB온도센서에러]
+# English: pcb_temperature_sensor_error
+타입: BIT_READ
+워드주소: 65
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: PCB온도센서 에러
+
+[생정초기화체크]
+# English: factory_reset_check
+타입: BIT_READ
+워드주소: 65
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 생정초기화 체크
+
+[관수중]
+# English: irrigation_in_progress
+타입: BIT_READ
+워드주소: 66
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수 중
+
+[감우센서감지중]
+# English: rain_sensor_detecting
+타입: BIT_READ
+워드주소: 66
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 감우센서 감지중
+
+[차광일사센서출력중]
+# English: shading_solar_sensor_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광:일사센서에 의한 출력중
+
+[차광시간조건출력중]
+# English: shading_time_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광:시간조건에 의한 출력중
+
+[차광온도조건출력중]
+# English: shading_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 차광:온도조건에 의한 출력중
+
+[보온시간조건출력중]
+# English: insulation_time_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 보온:시간조건에 의한 출력중
+
+[보온온도조건출력중]
+# English: insulation_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 보온:온도조건에 의한 출력중
+
+[천장좌감우조건출력중]
+# English: roof_left_rain_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌:감우조건에 의한 출력중
+
+[천장좌온도차조건출력중]
+# English: roof_left_temperature_diff_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌:온도차조건에 의한 출력중
+
+[천장좌습도조건출력중]
+# English: roof_left_humidity_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌:습도조건에 의한 출력중
+
+[천장좌온도조건출력중]
+# English: roof_left_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌:온도조건에 의한 출력중
+
+[난방습도조건출력중]
+# English: heating_humidity_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 4
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방:습도조건에 의한 출력중
+
+[난방온도조건출력중]
+# English: heating_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 3
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 난방:온도조건에 의한 출력중
+
+[관수시간조건출력중]
+# English: irrigation_time_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수:시간조건에 의한 출력중
+
+[관수함수율출력중]
+# English: irrigation_moisture_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수:함수율에 의한 출력중
+
+[유동팬시간조건출력중]
+# English: circulation_fan_time_condition_output_active
+타입: BIT_READ
+워드주소: 66
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 유동팬:시간조건에 의한 출력중
+
+[reserved_67_15]
+# English: reserved_67_15
+타입: BIT_READ
+워드주소: 67
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: reserved
+
+[측면보온커튼닫힘출력표시]
+# English: side_insulation_curtain_close_output_indicator
+타입: BIT_READ
+워드주소: 67
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 측면보온커튼 닫힘출력 표시
+
+[측면보온커튼열림출력표시]
+# English: side_insulation_curtain_open_output_indicator
+타입: BIT_READ
+워드주소: 67
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 측면보온커튼 열림출력 표시
+
+[천장우풍속출력중]
+# English: roof_right_wind_speed_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우 풍속에 의한 출력중
+
+[천장우시간출력중]
+# English: roof_right_time_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우 시간에 의한 출력중
+
+[천장좌풍속출력중]
+# English: roof_left_wind_speed_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌 풍속에 의한 출력중
+
+[천장좌시간출력중]
+# English: roof_left_time_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장좌 시간에 의한 출력중
+
+[조명출력표시]
+# English: lighting_output_indicator
+타입: BIT_READ
+워드주소: 67
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 조명출력 표시
+
+[천장우감우조건출력중]
+# English: roof_right_rain_condition_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우:감우조건에 의한 출력중
+
+[천장우온도차조건출력중]
+# English: roof_right_temperature_diff_condition_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우:온도차조건에 의한 출력중
+
+[천장우습도조건출력중]
+# English: roof_right_humidity_condition_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우:습도조건에 의한 출력중
+
+[천장우온도조건출력중]
+# English: roof_right_temperature_condition_output_active
+타입: BIT_READ
+워드주소: 67
+비트번호: 4
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 천장우:온도조건에 의한 출력중
+
+[관수반복횟수표시]
+# English: irrigation_repeat_count_indicator
+타입: BIT_READ
+워드주소: 67
+비트번호: 3
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 관수 반복 몇회 중인지 표시
+
+[reserved_67_2]
+# English: reserved_67_2
+타입: BIT_READ
+워드주소: 67
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: reserved
+
+[reserved_67_1]
+# English: reserved_67_1
+타입: BIT_READ
+워드주소: 67
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: reserved
+
+[reserved_67_0]
+# English: reserved_67_0
+타입: BIT_READ
+워드주소: 67
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: reserved
+
+[내부센서정보_15]
+# English: internal_sensor_info_15
+타입: BIT_READ
+워드주소: 68
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 정보
+
+[내부센서정보_14]
+# English: internal_sensor_info_14
+타입: BIT_READ
+워드주소: 68
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 정보
+
+[내부센서시간출력중]
+# English: internal_sensor_time_output_active
+타입: BIT_READ
+워드주소: 68
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 시간에의한출력중
+
+[내부센서온도출력중]
+# English: internal_sensor_temperature_output_active
+타입: BIT_READ
+워드주소: 68
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 온도에의한출력중
+
+[내부수분장력센서에러]
+# English: internal_soil_tension_sensor_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부수분장력센서 에러
+
+[내부함수율센서에러]
+# English: internal_moisture_sensor_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부함수율센서에러
+
+[내부일사센서에러]
+# English: internal_solar_radiation_sensor_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부일사센서에러
+
+[내부습도센서에러]
+# English: internal_humidity_sensor_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부습도센서에러
+
+[내부온도센서에러]
+# English: internal_temperature_sensor_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부온도센서에러
+
+[내부수분장력센서디바이스에러]
+# English: internal_soil_tension_sensor_device_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부수분장력센서 디바이스정보에러
+
+[내부함수율센서디바이스에러]
+# English: internal_moisture_sensor_device_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부함수율센서 디바이스정보에러
+
+[내부일사센서디바이스에러]
+# English: internal_solar_radiation_sensor_device_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 4
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부일사센서 디바이스정보에러
+
+[내부습도센서디바이스에러]
+# English: internal_humidity_sensor_device_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 3
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부습도센서 디바이스정보에러
+
+[내부온도센서디바이스에러]
+# English: internal_temperature_sensor_device_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부온도센서 디바이스정보에러
+
+[내부센서노드에러]
+# English: internal_sensor_node_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 노드정보에러
+
+[내부센서통신에러]
+# English: internal_sensor_communication_error
+타입: BIT_READ
+워드주소: 68
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 내부센서 통신에러
+
+[외부센서정보_15]
+# English: external_sensor_info_15
+타입: BIT_READ
+워드주소: 69
+비트번호: 15
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부센서 정보
+
+[외부센서정보_14]
+# English: external_sensor_info_14
+타입: BIT_READ
+워드주소: 69
+비트번호: 14
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부센서 정보
+
+[외부센서에러]
+# English: external_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 13
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부센서에러
+
+[외부풍속센서에러]
+# English: external_wind_speed_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 12
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부풍속센서에러
+
+[외부풍향센서에러]
+# English: external_wind_direction_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 11
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부풍향센서에러
+
+[외부일사센서에러]
+# English: external_solar_radiation_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 10
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부일사센서에러
+
+[외부습도센서에러]
+# English: external_humidity_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 9
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부습도센서에러
+
+[외부온도센서에러]
+# English: external_temperature_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 8
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부온도센서에러
+
+[외부감우센서에러]
+# English: external_rain_sensor_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 7
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부감우센서에러
+
+[외부풍속센서디바이스에러]
+# English: external_wind_speed_sensor_device_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 6
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부풍속센서 디바이스정보에러
+
+[외부풍향센서디바이스에러]
+# English: external_wind_direction_sensor_device_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 5
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부풍향센서 디바이스정보에러
+
+[외부일사센서디바이스에러]
+# English: external_solar_radiation_sensor_device_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 4
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부일사센서 디바이스정보에러
+
+[외부습도센서디바이스에러]
+# English: external_humidity_sensor_device_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 3
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부습도센서 디바이스정보에러
+
+[외부온도센서디바이스에러]
+# English: external_temperature_sensor_device_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 2
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부온도센서 디바이스정보에러
+
+[외부센서노드에러]
+# English: external_sensor_node_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 1
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부센서 노드정보에러
+
+[외부센서통신에러]
+# English: external_sensor_communication_error
+타입: BIT_READ
+워드주소: 69
+비트번호: 0
+값범위: 0~1
+변환식: bit_value
+단위: -
+설명: 외부센서 통신에러
+
+[내부현재온도]
+# English: indoor_current_temperature
+타입: REGISTER_READ
+워드주소: 70
+비트번호: -
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 내부현재온도
+
+[내부현재습도]
+# English: indoor_current_humidity
+타입: REGISTER_READ
+워드주소: 71
+비트번호: -
+값범위: 0~65535
+변환식: value / 10
+단위: %
+설명: 내부현재습도
+
+[내부현재일사량]
+# English: indoor_current_solar_radiation
+타입: REGISTER_READ
+워드주소: 72
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 내부현재일사량
+
+[내부현재함수율]
+# English: indoor_current_moisture
+타입: REGISTER_READ
+워드주소: 73
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: %
+설명: 내부현재 함수율
+
+[내부현재수분장력]
+# English: indoor_current_soil_tension
+타입: REGISTER_READ
+워드주소: 74
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: kPa
+설명: 내부현재 수분장력
+
+[외부현재온도]
+# English: outdoor_current_temperature
+타입: REGISTER_READ
+워드주소: 75
+비트번호: -
+값범위: 0~65535
+변환식: value / 10
+단위: °C
+설명: 외부 현재온도
+
+[외부현재습도]
+# English: outdoor_current_humidity
+타입: REGISTER_READ
+워드주소: 76
+비트번호: -
+값범위: 0~65535
+변환식: value / 10
+단위: %
+설명: 외부 현재습도
+
+[외부일사량]
+# English: outdoor_solar_radiation
+타입: REGISTER_READ
+워드주소: 77
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: W/m²
+설명: 외부 일사량
+
+[외부현재증발강]
+# English: outdoor_current_evaporation
+타입: REGISTER_READ
+워드주소: 78
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: -
+설명: 외부 현재 증발강
+
+[외부현재증속감]
+# English: outdoor_current_evaporation_rate
+타입: REGISTER_READ
+워드주소: 79
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: -
+설명: 외부 현재 증속감
+
+[다습관수까지남은시간조단위]
+타입: REGISTER_READ
+워드주소: 80,81
+비트번호: -
+값범위: 0~4294967295
+변환식: value
+단위: 초
+설명: 다습관수 까지 남은시간조단위 (2워드)
+
+[상부보온커튼현재이동량]
+타입: REGISTER_READ
+워드주소: 82
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: 초
+설명: 상부보온커튼 현재 이동량(초)
+
+[측면보온커튼현재이동량]
+타입: REGISTER_READ
+워드주소: 83
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: 초
+설명: 측면보온커튼 현재 이동량(초)
+
+[차광커튼현재이동량]
+타입: REGISTER_READ
+워드주소: 84
+비트번호: -
+값범위: 0~65535
+변환식: value
+단위: 초
+설명: 차광커튼 현재 이동량(초)
+
+
+================================================================================
+템플릿 (아래 형식으로 추가 항목을 작성하세요)
+================================================================================
+
+[제어명]
+타입: SENSOR_READ / BIT_READ / BIT_WRITE / REGISTER_READ / REGISTER_WRITE
+워드주소: 숫자
+비트번호: 숫자 (비트 타입인 경우) / - (레지스터 타입인 경우)
+값범위: 최소~최대
+변환식: value 또는 value / 10 또는 bit_value 등
+단위: °C, %, W/m², kPa, m/s 등
+설명: 상세 설명
+
+---
+타입 설명:
+- SENSOR_READ: 센서값 읽기 (Holding Register 전체 값)
+- BIT_READ: 특정 비트 읽기 (워드에서 비트 추출)
+- BIT_WRITE: 특정 비트 쓰기 (비트 ON/OFF 제어)
+- BIT_RANGE_READ: 비트 범위 읽기 (여러 비트를 하나의 값으로)
+- REGISTER_READ: 레지스터 전체 읽기
+- REGISTER_WRITE: 레지스터 전체 쓰기 (설정값 변경)
+
+================================================================================
+

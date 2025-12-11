@@ -1,0 +1,702 @@
+/* 센서 모니터 및 모니터링 페이지 공통 스타일 */
+
+.chart-container {
+  border-radius: 22px;
+  padding: 24px 28px;
+  background: linear-gradient(160deg, rgba(22, 29, 51, 0.9), rgba(9, 12, 24, 0.92));
+  border: 1px solid rgba(76, 107, 255, 0.1);
+}
+
+/* CCTV 모니터링 스타일 */
+.cctv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.cctv-item {
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(22, 29, 51, 0.9), rgba(9, 12, 24, 0.92));
+  border: 1px solid rgba(76, 107, 255, 0.1);
+}
+
+.cctv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(15, 21, 37, 0.8);
+  border-bottom: 1px solid rgba(76, 107, 255, 0.08);
+}
+
+.cctv-header span:first-child {
+  font-weight: 600;
+  color: var(--text-strong);
+  font-size: 15px;
+}
+
+.cctv-header span:last-child {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.cctv-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  display: grid;
+  place-items: center;
+}
+
+.no-signal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.no-signal-icon {
+  font-size: 64px;
+  opacity: 0.3;
+}
+
+.no-signal-text {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+}
+
+@media (max-width: 1024px) {
+  .cctv-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 네비게이션 링크 스타일 */
+nav a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border-radius: 16px;
+  padding: 12px 14px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+nav li.active a {
+  background: rgba(76, 107, 255, 0.18);
+  color: var(--text-strong);
+}
+
+nav a:hover {
+  background: rgba(76, 107, 255, 0.16);
+}
+
+.app-shell.sidebar-collapsed nav a {
+  justify-content: center;
+  padding: 12px;
+}
+
+.app-shell.sidebar-collapsed nav a > *:not(.icon) {
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* 제어 스케줄 페이지 스타일 */
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(27, 36, 64, 0.5);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.schedule-item:hover {
+  background: rgba(27, 36, 64, 0.7);
+}
+
+.schedule-item.upcoming {
+  border: 1px solid rgba(76, 107, 255, 0.3);
+}
+
+.schedule-time {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+.schedule-time strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.2;
+}
+
+.schedule-time span {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.schedule-info span {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.schedule-action {
+  background: rgba(76, 107, 255, 0.12);
+  color: var(--primary);
+  border: 1px solid rgba(76, 107, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.schedule-action:hover {
+  background: rgba(76, 107, 255, 0.2);
+  border-color: rgba(76, 107, 255, 0.4);
+}
+
+.pattern-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(18, 25, 46, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(76, 107, 255, 0.08);
+}
+
+/* 알림 센터 페이지 스타일 */
+.notification-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(27, 36, 64, 0.5);
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.notification-item.alert {
+  border-left-color: var(--danger);
+  background: rgba(255, 92, 122, 0.08);
+}
+
+.notification-item.warning {
+  border-left-color: var(--warning);
+  background: rgba(246, 191, 77, 0.08);
+}
+
+.notification-item.info {
+  border-left-color: var(--primary);
+  background: rgba(76, 107, 255, 0.08);
+}
+
+.notification-icon {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content strong {
+  display: block;
+  color: var(--text-strong);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.notification-content span {
+  font-size: 11px;
+  color: var(--text-soft);
+  opacity: 0.7;
+}
+
+.notification-action {
+  background: rgba(76, 107, 255, 0.12);
+  color: var(--primary);
+  border: 1px solid rgba(76, 107, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.notification-action:hover {
+  background: rgba(76, 107, 255, 0.2);
+  border-color: rgba(76, 107, 255, 0.4);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: 0.3s;
+  border-radius: 34px;
+}
+
+.toggle-switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: var(--primary);
+}
+
+.toggle-switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.notification-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notification-table th,
+.notification-table td {
+  text-align: left;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(76, 107, 255, 0.08);
+}
+
+.notification-table th {
+  background: rgba(15, 21, 37, 0.5);
+  color: var(--text-strong);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.notification-table td {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.notification-table tbody tr:hover {
+  background: rgba(76, 107, 255, 0.04);
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-block;
+}
+
+.badge.auto {
+  background: rgba(76, 175, 80, 0.25);
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  color: #4caf50;
+}
+
+.badge.manual {
+  background: rgba(244, 67, 54, 0.25);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  color: #f44336;
+}
+
+.badge.warning {
+  background: rgba(255, 152, 0, 0.25);
+  border: 1px solid rgba(255, 152, 0, 0.5);
+  color: #ff9800;
+}
+
+.badge.info {
+  background: rgba(33, 150, 243, 0.25);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+  color: #2196f3;
+}
+
+.badge.alert {
+  background: rgba(244, 67, 54, 0.25);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  color: #f44336;
+}
+
+/* 리포트 페이지 스타일 */
+.quick-report-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  background: rgba(27, 36, 64, 0.5);
+  border: 1px solid rgba(76, 107, 255, 0.1);
+  border-radius: 16px;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.quick-report-btn:hover {
+  background: rgba(76, 107, 255, 0.12);
+  border-color: rgba(76, 107, 255, 0.3);
+  transform: translateY(-4px);
+}
+
+.quick-report-btn strong {
+  color: var(--text-strong);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background: rgba(27, 36, 64, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(76, 107, 255, 0.1);
+}
+
+.report-action-btn {
+  background: rgba(76, 107, 255, 0.12);
+  color: var(--primary);
+  border: 1px solid rgba(76, 107, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.report-action-btn:hover {
+  background: rgba(76, 107, 255, 0.2);
+  border-color: rgba(76, 107, 255, 0.4);
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.log-table th,
+.log-table td {
+  text-align: left;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(76, 107, 255, 0.08);
+}
+
+.log-table th {
+  background: rgba(15, 21, 37, 0.5);
+  color: var(--text-strong);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.log-table td {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.log-table tbody tr:hover {
+  background: rgba(76, 107, 255, 0.04);
+}
+
+.log-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 로그인 페이지 스타일 */
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+}
+
+.login-card {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.02em;
+}
+
+.login-header p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 4px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(76, 107, 255, 0.2);
+  border-radius: 12px;
+  color: var(--text-strong);
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+  outline: none;
+  border-color: rgba(76, 107, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(76, 107, 255, 0.1);
+}
+
+.remember-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -8px;
+}
+
+.remember-section input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.remember-section label {
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-soft);
+  margin: 0;
+}
+
+.login-button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(76, 107, 255, 0.9), rgba(19, 214, 163, 0.8));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 12px;
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, rgba(76, 107, 255, 1), rgba(19, 214, 163, 0.9));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(76, 107, 255, 0.3);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+.login-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(76, 107, 255, 0.1);
+}
+
+/* 프로필 섹션 스타일 */
+.profile-section {
+  padding: 0 8px 16px;
+  border-bottom: 1px solid rgba(76, 107, 255, 0.08);
+  margin-bottom: 8px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(76, 107, 255, 0.08);
+  transition: background 0.2s ease;
+}
+
+.profile-info:hover {
+  background: rgba(76, 107, 255, 0.12);
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(76, 107, 255, 0.8), rgba(19, 214, 163, 0.7));
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.profile-role {
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+.profile-logout {
+  background: rgba(255, 92, 122, 0.12);
+  border: 1px solid rgba(255, 92, 122, 0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+.profile-logout:hover {
+  background: rgba(255, 92, 122, 0.2);
+  border-color: rgba(255, 92, 122, 0.4);
+  transform: scale(1.05);
+}
+
+.app-shell.sidebar-collapsed .profile-section {
+  padding: 0 8px 12px;
+}
+
+.app-shell.sidebar-collapsed .profile-info {
+  justify-content: center;
+  padding: 12px;
+}
+
+.app-shell.sidebar-collapsed .profile-avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
+.app-shell.sidebar-collapsed .profile-details {
+  display: none;
+}
+
+.app-shell.sidebar-collapsed .profile-logout {
+  display: none;
+}

@@ -1,0 +1,17 @@
+# Smart Farm REST API Server - Required Packages
+# Python 3.8+
+
+# FastAPI and Web Server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Modbus Communication
+pymodbus==3.5.4
+
+# Data Models and Validation
+pydantic==2.5.0
+
+# Additional Dependencies
+python-multipart==0.0.6
+requests==2.31.0
+xmltodict==0.13.0

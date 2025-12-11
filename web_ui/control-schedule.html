@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>제어 스케줄 - 스마트팜 데시보드</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="사이드바 토글">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="brand"><span>🌱</span>AISEED FARM ONE</div>
+        <nav>
+          <ul>
+            <li><a href="index.html"><div class="icon">📊</div><span>데시보드</span></a></li>
+            <li><a href="sensor-monitor.html"><div class="icon">🛰️</div><span>센서 모니터</span></a></li>
+            <li><a href="monitoring.html"><div class="icon">📹</div><span>모니터링</span></a></li>
+            <li class="active"><a href="control-schedule.html"><div class="icon">🧭</div><span>제어 스케줄</span></a></li>
+            <li><a href="notifications.html"><div class="icon">🔔</div><span>알림 센터</span></a></li>
+            <li><a href="reports.html"><div class="icon">🗂️</div><span>리포트 & 로그</span></a></li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          실시간 데이터 수집 <strong>ON</strong><br />
+          최근 업데이트: 오늘 오후 08:51
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>제어 스케줄</h1>
+            <p>자동 제어 타임테이블 및 예약 관리</p>
+          </div>
+          <div class="top-actions">
+            <button>새 스케줄 등록</button>
+            <button>일괄 수정</button>
+          </div>
+        </header>
+
+        <main class="content">
+          <section class="hero-grid">
+            <article class="card">
+              <h2>오늘의 예정 스케줄</h2>
+              <div style="display: grid; gap: 16px; margin-top: 16px;">
+                <div class="schedule-item upcoming">
+                  <div class="schedule-time">
+                    <strong>12:30</strong>
+                    <span>관수 시스템</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge auto">자동</div>
+                    <span>급수량 15L · 배수 확인</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+
+                <div class="schedule-item upcoming">
+                  <div class="schedule-time">
+                    <strong>15:00</strong>
+                    <span>천장 커튼 열기</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge auto">자동</div>
+                    <span>온도 25℃ 이상 시 자동 중단</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+
+                <div class="schedule-item upcoming">
+                  <div class="schedule-time">
+                    <strong>18:00</strong>
+                    <span>LED 조명 시작</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge manual">수동</div>
+                    <span>밝기 70% · 자정 종료</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>내일의 예정 스케줄</h2>
+              <div style="display: grid; gap: 16px; margin-top: 16px;">
+                <div class="schedule-item">
+                  <div class="schedule-time">
+                    <strong>08:00</strong>
+                    <span>난방기 예열</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge auto">자동</div>
+                    <span>목표 온도 22℃</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+
+                <div class="schedule-item">
+                  <div class="schedule-time">
+                    <strong>09:00</strong>
+                    <span>유동팬 가동</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge auto">자동</div>
+                    <span>속도 50% · 2시간</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+
+                <div class="schedule-item">
+                  <div class="schedule-time">
+                    <strong>12:30</strong>
+                    <span>관수 시스템</span>
+                  </div>
+                  <div class="schedule-info">
+                    <div class="badge auto">자동</div>
+                    <span>급수량 15L · 반복</span>
+                  </div>
+                  <button class="schedule-action">상세보기</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>정기 작업 관리</h2>
+              <div style="display: grid; gap: 14px; margin-top: 16px; font-size: 13px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(27, 36, 64, 0.5); border-radius: 12px;">
+                  <div>
+                    <strong style="color: var(--text-strong);">관수 라인 필터 세척</strong>
+                    <span style="display: block; color: var(--text-soft); margin-top: 4px;">D-1 · 담당자 박유진</span>
+                  </div>
+                  <div class="badge warning">예정</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(27, 36, 64, 0.5); border-radius: 12px;">
+                  <div>
+                    <strong style="color: var(--text-strong);">온실 내부 점검</strong>
+                    <span style="display: block; color: var(--text-soft); margin-top: 4px;">D-3 · 주기 7일 · 완료율 60%</span>
+                  </div>
+                  <div class="badge auto">진행중</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(27, 36, 64, 0.5); border-radius: 12px;">
+                  <div>
+                    <strong style="color: var(--text-strong);">양액 배합 교체</strong>
+                    <span style="display: block; color: var(--text-soft); margin-top: 4px;">D-5 · 자동 예약</span>
+                  </div>
+                  <div class="badge auto">예약됨</div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>자동 제어 패턴</h2>
+              <span>일주일 기준 반복 작업</span>
+            </div>
+            <div class="card">
+              <div style="display: grid; gap: 12px;">
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(76, 175, 80, 0.2); display: grid; place-items: center; font-size: 24px;">💧</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">관수 시스템</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">매일 08:00, 12:30, 18:00 · 월/수/금 추가 14:00</span>
+                    </div>
+                  </div>
+                  <div class="chip auto">ON</div>
+                </div>
+
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(244, 67, 54, 0.2); display: grid; place-items: center; font-size: 24px;">🔥</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">난방기</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">평일 08:00-17:00 · 주말 10:00-15:00</span>
+                    </div>
+                  </div>
+                  <div class="chip manual">OFF</div>
+                </div>
+
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(33, 150, 243, 0.2); display: grid; place-items: center; font-size: 24px;">🌪️</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">유동팬</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">온도 25℃ 이상 또는 습도 70% 이상 시 자동</span>
+                    </div>
+                  </div>
+                  <div class="chip auto">ON</div>
+                </div>
+
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(156, 39, 176, 0.2); display: grid; place-items: center; font-size: 24px;">💨</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">제습기</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">습도 75% 이상 시 자동 가동</span>
+                    </div>
+                  </div>
+                  <div class="chip auto">ON</div>
+                </div>
+
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 235, 59, 0.2); display: grid; place-items: center; font-size: 24px;">💡</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">LED 조명</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">일사량 300 이하 시 자동 보정 · 밝기 70%</span>
+                    </div>
+                  </div>
+                  <div class="chip auto">ON</div>
+                </div>
+
+                <div class="pattern-item">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(0, 150, 136, 0.2); display: grid; place-items: center; font-size: 24px;">🪟</div>
+                    <div style="flex: 1;">
+                      <strong style="color: var(--text-strong); font-size: 15px;">개폐 창</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 13px; margin-top: 4px;">온도 27℃ 이상 시 자동 개방 · 풍속 8 이상 시 제한</span>
+                    </div>
+                  </div>
+                  <div class="chip auto">ON</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>커튼 제어 일정</h2>
+              <span>계절별 자동 조절 패턴</span>
+            </div>
+            <div class="card">
+              <div style="display: grid; gap: 14px;">
+                <div style="padding: 16px; background: rgba(27, 36, 64, 0.5); border-radius: 12px; border: 1px solid rgba(76, 107, 255, 0.1);">
+                  <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 15px;">천장 차광 커튼</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">일사량 600 W/㎡ 이상 시 자동 차광</span>
+                    </div>
+                    <div class="chip auto">자동</div>
+                  </div>
+                  <div style="font-size: 12px; color: var(--text-soft);">⏰ 09:00~17:00 · 계절 모드: 봄/가을</div>
+                </div>
+
+                <div style="padding: 16px; background: rgba(27, 36, 64, 0.5); border-radius: 12px; border: 1px solid rgba(76, 107, 255, 0.1);">
+                  <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 15px;">천장 보온 커튼</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">온도 20℃ 이하 시 자동 폐쇄</span>
+                    </div>
+                    <div class="chip auto">자동</div>
+                  </div>
+                  <div style="font-size: 12px; color: var(--text-soft);">⏰ 야간 19:00~07:00 · 온도 기반 조건부</div>
+                </div>
+
+                <div style="padding: 16px; background: rgba(27, 36, 64, 0.5); border-radius: 12px; border: 1px solid rgba(76, 107, 255, 0.1);">
+                  <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 15px;">측면 보온 커튼</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">바람 방향 기준 자동 조절</span>
+                    </div>
+                    <div class="chip auto">자동</div>
+                  </div>
+                  <div style="font-size: 12px; color: var(--text-soft);">⏰ 풍향·풍속 기반 · 북풍 위험 시 자동 폐쇄</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer>© 2025 AISEED FARM ONE · 실증 서비스 버전 0.9.3</footer>
+      </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
+

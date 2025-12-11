@@ -1,0 +1,240 @@
+================================================================================
+Modbus TCP 센서 읽기/쓰기 핵심 가이드
+================================================================================
+
+1. 연결 설정
+================================================================================
+IP = "168.131.153.52"  또는  "aiseednaju.iptime.org"
+PORT = 9139
+UNIT_ID = 1
+
+from pymodbus.client import ModbusTcpClient
+
+client = ModbusTcpClient(host=IP, port=PORT, timeout=5, retries=3)
+client.connect()
+
+
+2. 센서값 읽기 (Holding Register)
+================================================================================
+
+2-1. 단일 레지스터 읽기
+------------------------
+resp = client.read_holding_registers(address=워드주소, count=1, slave=UNIT_ID)
+value = resp.registers[0]
+
+예시) 주소 70번 (내부 온도) 읽기:
+resp = client.read_holding_registers(address=70, count=1, slave=1)
+raw_value = resp.registers[0]  # 예: 250
+actual_value = raw_value / 10   # 실제값: 25.0°C
+
+
+2-2. 비트 추출하여 읽기 (감우센서 등)
+------------------------
+resp = client.read_holding_registers(address=66, count=1, slave=UNIT_ID)
+word_value = resp.registers[0]
+bit_value = (word_value >> 14) & 1  # 14번 비트 추출
+
+예시) 주소 66번의 14번 비트 (감우센서):
+word_value = resp.registers[0]
+rain_detected = (word_value >> 14) & 1  # 0=비없음, 1=비감지
+
+
+2-3. 센서 주소 맵핑
+------------------------
+70: 내부 온도 (°C, /10)
+71: 내부 습도 (%, /10)
+72: 내부 일사량 (W/m²)
+73: 내부 현재 함수율 (%)
+74: 내부 수분 장력 (kPa)
+75: 외부 온도 (°C, /10)
+76: 외부 습도 (%, /10)
+77: 외부 일사량 (W/m²)
+78: 외부 풍향 (°)
+79: 외부 풍속 (m/s)
+
+66번 워드의 14번 비트: 감우센서 (0=비없음, 1=비감지)
+20번 워드의 15번 비트: 천장 우측 닫기 모드 (0=OFF, 1=ON)
+20번 워드의 14번 비트: 천장 우측 열기 모드 (0=OFF, 1=ON)
+
+
+3. 센서값 쓰기 (Write Register)
+================================================================================
+
+3-1. 특정 비트만 쓰기 (ON/OFF 제어)
+------------------------
+# 1단계: 현재 워드 값 읽기
+resp = client.read_holding_registers(address=워드주소, count=1, slave=UNIT_ID)
+current_value = resp.registers[0]
+
+# 2단계: 비트 값 변경
+if bit_value == 1:
+    new_value = current_value | (1 << bit_num)      # 비트를 1로 설정
+else:
+    new_value = current_value & ~(1 << bit_num)     # 비트를 0으로 설정
+
+# 3단계: 워드 쓰기
+client.write_register(address=워드주소, value=new_value, slave=UNIT_ID)
+
+예시) 20번 워드의 15번 비트를 1로 설정 (우측 닫기 ON):
+resp = client.read_holding_registers(address=20, count=1, slave=1)
+current = resp.registers[0]
+new = current | (1 << 15)
+client.write_register(address=20, value=new, slave=1)
+
+
+3-2. 워드 전체 값 쓰기 (온도 설정값 등)
+------------------------
+client.write_register(address=워드주소, value=값, slave=UNIT_ID)
+
+예시) 온도 설정값 25도 쓰기 (주소 100번 가정):
+value = 250  # 25.0도 * 10
+client.write_register(address=100, value=250, slave=1)
+
+
+3-3. 비트 범위에 값 쓰기 (여러 비트 동시 설정)
+------------------------
+# 1단계: 현재 워드 값 읽기
+resp = client.read_holding_registers(address=워드주소, count=1, slave=UNIT_ID)
+current_value = resp.registers[0]
+
+# 2단계: 비트 범위 계산 및 값 설정
+bit_count = end_bit - start_bit + 1
+mask = ((1 << bit_count) - 1) << start_bit
+new_value = (current_value & ~mask) | (value << start_bit)
+
+# 3단계: 워드 쓰기
+client.write_register(address=워드주소, value=new_value, slave=UNIT_ID)
+
+예시) 주소 50번의 9~6비트에 3 쓰기:
+resp = client.read_holding_registers(address=50, count=1, slave=1)
+current = resp.registers[0]
+bit_count = 9 - 6 + 1  # 4비트
+mask = ((1 << 4) - 1) << 6  # 0000001111000000
+new = (current & ~mask) | (3 << 6)
+client.write_register(address=50, value=new, slave=1)
+
+
+4. 비트 연산 핵심
+================================================================================
+
+4-1. 비트 추출
+------------------------
+bit_value = (word_value >> bit_num) & 1
+
+예시:
+word = 0b1010_1100_1101_0110  # 44246
+bit_14 = (word >> 14) & 1      # = 1
+bit_7 = (word >> 7) & 1        # = 1
+bit_0 = (word >> 0) & 1        # = 0
+
+
+4-2. 비트 설정 (1로)
+------------------------
+new_value = current_value | (1 << bit_num)
+
+예시:
+current = 0b0000_0000_0000_0000
+new = current | (1 << 5)  # 5번 비트를 1로
+# new = 0b0000_0000_0010_0000
+
+
+4-3. 비트 해제 (0으로)
+------------------------
+new_value = current_value & ~(1 << bit_num)
+
+예시:
+current = 0b1111_1111_1111_1111
+new = current & ~(1 << 5)  # 5번 비트를 0으로
+# new = 0b1111_1111_1101_1111
+
+
+5. 실제 사용 예시 코드
+================================================================================
+
+5-1. 센서 모니터링 (10초마다 읽기)
+------------------------
+from pymodbus.client import ModbusTcpClient
+import time
+
+client = ModbusTcpClient(host="168.131.153.52", port=9139)
+client.connect()
+
+while True:
+    # 내부 온도 읽기 (주소 70)
+    resp = client.read_holding_registers(address=70, count=1, slave=1)
+    temp = resp.registers[0] / 10
+    
+    # 감우센서 읽기 (주소 66, 비트 14)
+    resp = client.read_holding_registers(address=66, count=1, slave=1)
+    rain = (resp.registers[0] >> 14) & 1
+    
+    print(f"온도: {temp}°C, 비: {rain}")
+    time.sleep(10)
+
+client.close()
+
+
+5-2. 천장 제어 (비트 쓰기)
+------------------------
+from pymodbus.client import ModbusTcpClient
+
+client = ModbusTcpClient(host="168.131.153.52", port=9139)
+client.connect()
+
+# 우측 열기 ON (주소 20, 비트 14)
+resp = client.read_holding_registers(address=20, count=1, slave=1)
+current = resp.registers[0]
+new = current | (1 << 14)
+client.write_register(address=20, value=new, slave=1)
+
+client.close()
+
+
+6. 에러 처리
+================================================================================
+
+6-1. 읽기 에러 체크
+------------------------
+resp = client.read_holding_registers(address=70, count=1, slave=1)
+if resp.isError():
+    print("읽기 실패")
+elif hasattr(resp, 'registers') and resp.registers:
+    value = resp.registers[0]
+else:
+    print("데이터 없음")
+
+
+6-2. 쓰기 에러 체크
+------------------------
+resp = client.write_register(address=20, value=100, slave=1)
+if resp.isError():
+    print("쓰기 실패")
+
+
+7. 연결 종료
+================================================================================
+client.close()
+
+
+8. 전체 워크플로우
+================================================================================
+
+1) 연결 생성
+   client = ModbusTcpClient(host=IP, port=PORT)
+   client.connect()
+
+2) 읽기
+   resp = client.read_holding_registers(address=주소, count=1, slave=1)
+   value = resp.registers[0]
+
+3) 쓰기 (비트)
+   - 현재 값 읽기
+   - 비트 연산으로 새 값 계산
+   - 쓰기
+
+4) 연결 종료
+   client.close()
+
+
+================================================================================
+

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>로그인 - 스마트팜 데시보드</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+  <body style="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <div style="width: 64px; height: 64px; border-radius: 18px; background: linear-gradient(135deg, rgba(76, 107, 255, 0.5), rgba(19, 214, 163, 0.45)); display: grid; place-items: center; font-size: 32px; margin-bottom: 24px;">🌱</div>
+          <h1>AISEED FARM ONE</h1>
+          <p>나주 대실마을 스마트팜 관리 시스템</p>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="username">아이디</label>
+            <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required autocomplete="username" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required autocomplete="current-password" />
+          </div>
+
+          <div class="remember-section">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">로그인 상태 유지</label>
+          </div>
+
+          <button type="submit" class="login-button">로그인</button>
+        </form>
+
+        <div class="login-footer">
+          <p style="margin: 0; font-size: 12px; color: var(--text-soft); text-align: center;">
+            © 2025 AISEED FARM ONE · Ver 0.9.3
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+  </body>
+</html>
+

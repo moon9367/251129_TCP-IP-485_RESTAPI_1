@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>리포트 & 로그 - 스마트팜 데시보드</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="사이드바 토글">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="brand"><span>🌱</span>AISEED FARM ONE</div>
+        <nav>
+          <ul>
+            <li><a href="index.html"><div class="icon">📊</div><span>데시보드</span></a></li>
+            <li><a href="sensor-monitor.html"><div class="icon">🛰️</div><span>센서 모니터</span></a></li>
+            <li><a href="monitoring.html"><div class="icon">📹</div><span>모니터링</span></a></li>
+            <li><a href="control-schedule.html"><div class="icon">🧭</div><span>제어 스케줄</span></a></li>
+            <li><a href="notifications.html"><div class="icon">🔔</div><span>알림 센터</span></a></li>
+            <li class="active"><a href="reports.html"><div class="icon">🗂️</div><span>리포트 & 로그</span></a></li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          실시간 데이터 수집 <strong>ON</strong><br />
+          최근 업데이트: 오늘 오후 08:51
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>리포트 & 로그</h1>
+            <p>데이터 분석 리포트 및 작업 로그 관리</p>
+          </div>
+          <div class="top-actions">
+            <button>리포트 생성</button>
+            <button>내보내기</button>
+          </div>
+        </header>
+
+        <main class="content">
+          <section class="hero-grid">
+            <article class="card">
+              <h2>이번 주 요약</h2>
+              <div style="display: grid; gap: 14px; margin-top: 16px;">
+                <div style="padding: 16px; background: linear-gradient(135deg, rgba(19, 214, 163, 0.15), rgba(76, 175, 80, 0.15)); border-radius: 12px; border: 1px solid rgba(76, 175, 80, 0.3);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div style="font-size: 12px; color: var(--text-soft); margin-bottom: 4px;">평균 온도</div>
+                      <div style="font-size: 28px; font-weight: 700; color: #4caf50;">24.8℃</div>
+                    </div>
+                    <div style="font-size: 20px;">📈</div>
+                  </div>
+                  <div style="margin-top: 8px; font-size: 12px; color: var(--text-soft);">지난주 대비 +0.5℃ 상승</div>
+                </div>
+
+                <div style="padding: 16px; background: linear-gradient(135deg, rgba(76, 107, 255, 0.15), rgba(33, 150, 243, 0.15)); border-radius: 12px; border: 1px solid rgba(76, 107, 255, 0.3);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div style="font-size: 12px; color: var(--text-soft); margin-bottom: 4px;">에너지 효율</div>
+                      <div style="font-size: 28px; font-weight: 700; color: #2196f3;">87%</div>
+                    </div>
+                    <div style="font-size: 20px;">⚡</div>
+                  </div>
+                  <div style="margin-top: 8px; font-size: 12px; color: var(--text-soft);">목표 대비 7%p 초과 달성</div>
+                </div>
+
+                <div style="padding: 16px; background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 193, 7, 0.15)); border-radius: 12px; border: 1px solid rgba(255, 193, 7, 0.3);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div style="font-size: 12px; color: var(--text-soft); margin-bottom: 4px;">작업 완료율</div>
+                      <div style="font-size: 28px; font-weight: 700; color: #ffc107;">92%</div>
+                    </div>
+                    <div style="font-size: 20px;">✅</div>
+                  </div>
+                  <div style="margin-top: 8px; font-size: 12px; color: var(--text-soft);">계획된 작업 8/10 완료</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>빠른 리포트</h2>
+              <div style="display: grid; gap: 12px; margin-top: 16px;">
+                <button class="quick-report-btn">
+                  <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                  <strong>일일 리포트</strong>
+                  <span style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">오늘의 센서 데이터 요약</span>
+                </button>
+
+                <button class="quick-report-btn">
+                  <div style="font-size: 24px; margin-bottom: 8px;">📈</div>
+                  <strong>주간 리포트</strong>
+                  <span style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">이번 주 환경 변화 분석</span>
+                </button>
+
+                <button class="quick-report-btn">
+                  <div style="font-size: 24px; margin-bottom: 8px;">📉</div>
+                  <strong>월간 리포트</strong>
+                  <span style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">이번 달 운영 통계</span>
+                </button>
+
+                <button class="quick-report-btn">
+                  <div style="font-size: 24px; margin-bottom: 8px;">📋</div>
+                  <strong>에너지 리포트</strong>
+                  <span style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">전력 사용량 및 효율 분석</span>
+                </button>
+
+                <button class="quick-report-btn">
+                  <div style="font-size: 24px; margin-bottom: 8px;">🔧</div>
+                  <strong>유지보수 리포트</strong>
+                  <span style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">장비 점검 및 교체 내역</span>
+                </button>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>최근 생성 리포트</h2>
+              <div style="display: grid; gap: 12px; margin-top: 16px;">
+                <div class="report-item">
+                  <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(76, 107, 255, 0.2); display: grid; place-items: center; font-size: 24px;">📊</div>
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 14px;">일일 리포트 2025-10-31</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">센서 데이터 · 환경 통계 · 제어 내역</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="report-action-btn">다운로드</button>
+                    <button class="report-action-btn">미리보기</button>
+                  </div>
+                </div>
+
+                <div class="report-item">
+                  <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(244, 67, 54, 0.2); display: grid; place-items: center; font-size: 24px;">📈</div>
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 14px;">주간 리포트 2025-10-24~30</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">주간 트렌드 · 성장 지표 · 알림 통계</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="report-action-btn">다운로드</button>
+                    <button class="report-action-btn">미리보기</button>
+                  </div>
+                </div>
+
+                <div class="report-item">
+                  <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 152, 0, 0.2); display: grid; place-items: center; font-size: 24px;">📉</div>
+                    <div>
+                      <strong style="color: var(--text-strong); font-size: 14px;">월간 리포트 2025-10</strong>
+                      <span style="display: block; color: var(--text-soft); font-size: 12px; margin-top: 4px;">월간 통계 · 효율 분석 · 예산 내역</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="report-action-btn">다운로드</button>
+                    <button class="report-action-btn">미리보기</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>시스템 로그</h2>
+              <span>최근 50개 작업 기록 · 실시간 업데이트</span>
+            </div>
+            <div class="card" style="padding: 0; overflow: hidden;">
+              <table class="log-table">
+                <thead>
+                  <tr>
+                    <th style="width: 100px;">시간</th>
+                    <th style="width: 80px;">레벨</th>
+                    <th>내용</th>
+                    <th style="width: 120px;">사용자</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>08:51:23</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>센서 데이터 갱신 완료 · 모든 장치 정상</td>
+                    <td>시스템</td>
+                  </tr>
+                  <tr>
+                    <td>08:50:15</td>
+                    <td><span class="badge auto">AUTO</span></td>
+                    <td>AI 제어 제안 생성: 관수량 조정 추천</td>
+                    <td>AI 시스템</td>
+                  </tr>
+                  <tr>
+                    <td>08:49:42</td>
+                    <td><span class="badge warning">WARN</span></td>
+                    <td>토양 수분 함수율 임계값 초과 감지</td>
+                    <td>센서 모니터</td>
+                  </tr>
+                  <tr>
+                    <td>08:48:30</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>유동팬 자동 조절 완료 · 속도 45% 유지</td>
+                    <td>제어 시스템</td>
+                  </tr>
+                  <tr>
+                    <td>08:47:18</td>
+                    <td><span class="badge auto">AUTO</span></td>
+                    <td>LED 조명 보정 모드 활성화 · 일사량 보조</td>
+                    <td>조명 시스템</td>
+                  </tr>
+                  <tr>
+                    <td>08:45:52</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>데이터 백업 시작 · 예상 소요시간 2분</td>
+                    <td>백업 서비스</td>
+                  </tr>
+                  <tr>
+                    <td>08:43:21</td>
+                    <td><span class="badge auto">AUTO</span></td>
+                    <td>천장 차광 커튼 자동 조정 · 일사량 기준</td>
+                    <td>제어 시스템</td>
+                  </tr>
+                  <tr>
+                    <td>08:41:05</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>외부 센서 데이터 갱신 · 온도 29.8℃</td>
+                    <td>외부 센서</td>
+                  </tr>
+                  <tr>
+                    <td>08:38:44</td>
+                    <td><span class="badge warning">WARN</span></td>
+                    <td>유동팬 베어링 진동 수치 상승 감지</td>
+                    <td>장비 모니터</td>
+                  </tr>
+                  <tr>
+                    <td>08:35:12</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>사용자 로그인: 홍길동 · IP 192.168.1.45</td>
+                    <td>홍길동</td>
+                  </tr>
+                  <tr>
+                    <td>08:30:00</td>
+                    <td><span class="badge auto">AUTO</span></td>
+                    <td>정기 데이터 수집 시작 · 주기 5분</td>
+                    <td>데이터 수집기</td>
+                  </tr>
+                  <tr>
+                    <td>08:25:33</td>
+                    <td><span class="badge info">INFO</span></td>
+                    <td>백업 완료 · 총 45MB 저장됨</td>
+                    <td>백업 서비스</td>
+                  </tr>
+                  <tr>
+                    <td>08:20:01</td>
+                    <td><span class="badge auto">AUTO</span></td>
+                    <td>관수 시스템 예약 취소됨 · 사용자 요청</td>
+                    <td>김현수</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+
+        <footer>© 2025 AISEED FARM ONE · 실증 서비스 버전 0.9.3</footer>
+      </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
+

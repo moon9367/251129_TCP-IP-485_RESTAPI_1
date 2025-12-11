@@ -1,0 +1,472 @@
+================================================================================
+제어 항목 요약 (간편 참조용)
+================================================================================
+형식: 제어명 / 워드주소 / 비트번호 / 타입 / 설명
+워드주소 0~84 순서대로 정렬
+================================================================================
+
+IO보드국번 / 0 / 0~15 / 레지스터쓰기 / IO보드 국번
+  # io_board_station_number
+PCB주위온열설정 / 1 / 0~15 / 레지스터쓰기 / PCB 주위온도 설정 (-55.0~99.9도, /10)
+프로그램비밀번호 / 2 / 0~15 / 레지스터쓰기 / 프로그램 비밀번호 (0000~9999)
+  # program_password
+센서값저장주기 / 3 / 0~15 / 레지스터쓰기 / 센서값 저장주기 (분)
+  # sensor_save_interval
+센서기록유닛포함 / 4 / 2 / 비트쓰기 / 센서기록 시 유닛포함 여부 (0:미포함, 1:포함)
+  # sensor_record_unit_include
+센서파일타입 / 4 / 1 / 비트쓰기 / 센서기록파일타입 (0:txt, 1:csv)
+  # sensor_file_type
+비밀번호사용 / 4 / 0 / 비트쓰기 / 비밀번호사용유무 (1:사용X, 0:사용)
+  # password_enable
+유동팬ON온도 / 5 / 0~15 / 레지스터쓰기 / 유동팬 ON설정온도 (°C, /10)
+  # circulation_fan_on_temperature
+유동팬OFF온도 / 6 / 0~15 / 레지스터쓰기 / 유동팬 OFF설정온도 (°C, /10)
+  # circulation_fan_off_temperature
+유동팬ON습도 / 7 / 0~15 / 레지스터쓰기 / 유동팬 ON설정습도 (%, /10)
+  # circulation_fan_on_humidity
+유동팬OFF습도 / 8 / 0~15 / 레지스터쓰기 / 유동팬 OFF설정습도 (%, /10)
+  # circulation_fan_off_humidity
+유동팬OFF시간 / 9 / 11~15 / 비트범위쓰기 / 유동팬 OFF시간
+  # circulation_fan_off_time
+유동팬시간조절 / 9 / 10 / 비트쓰기 / 유동팬시간조절 사용
+  # circulation_fan_time_control_enable
+유동팬습도조절 / 9 / 9 / 비트쓰기 / 유동팬습도조절 사용
+  # circulation_fan_humidity_control_enable
+유동팬온도조절 / 9 / 8 / 비트쓰기 / 유동팬 온도조절 사용
+  # circulation_fan_temperature_control_enable
+유동팬온시간 / 9 / 2~7 / 비트범위쓰기 / 유동팬 온시간
+  # circulation_fan_on_time
+유동팬강제운전 / 9 / 1 / 비트쓰기 / 유동팬강제운전
+  # circulation_fan_forced_operation
+유동팬오토모드 / 9 / 0 / 비트쓰기 / 유동팬오토모드
+  # circulation_fan_auto_mode
+함수율관수설정 / 10 / 8~15 / 비트범위쓰기 / 함수율에 의한 관수 설정값
+  # irrigation_moisture_setting
+관수시작시 / 10 / 2~7 / 비트범위쓰기 / 관수 시작시각(시)
+  # irrigation_start_hour
+관수강제운전 / 10 / 1 / 비트쓰기 / 관수강제운전
+  # irrigation_forced_operation
+관수오토모드 / 10 / 0 / 비트쓰기 / 관수오토모드
+  # irrigation_auto_mode
+관수OFF시간 / 11 / 9~15 / 비트범위쓰기 / 관수 OFF시간(분)
+  # irrigation_off_time_minutes
+관수타임유닛 / 11 / 8 / 비트쓰기 / 관수ON/OFF 타임유닛
+  # irrigation_time_unit
+관수ON시간 / 11 / 1~7 / 비트범위쓰기 / 관수 ON시간(분)
+  # irrigation_on_time_minutes
+관수센서조건 / 11 / 0 / 비트쓰기 / 관수 센서조건 사용
+  # irrigation_sensor_condition_enable
+관수종료시 / 12 / 10~15 / 비트범위쓰기 / 관수 종료시각(시)
+  # irrigation_end_hour
+관수반복회수 / 12 / 6~9 / 비트범위쓰기 / 관수 반복회수
+  # irrigation_repeat_count
+다음관수일 / 12 / 0~5 / 비트범위쓰기 / 다음관수 일 설정
+  # next_irrigation_day
+수분장력설정 / 13 / 8~15 / 비트범위쓰기 / 수분장력설정
+  # soil_tension_setting
+수분장력사용 / 13 / 6 / 비트쓰기 / 수분장력사용
+  # soil_tension_enable
+관수시작분 / 13 / 0~5 / 비트범위쓰기 / 관수 시작시각(분)
+  # irrigation_start_minute
+난방ON습도설정 / 14 / 2~15 / 비트범위쓰기 / 난방 ON 습도설정값
+  # heating_on_humidity_setting
+난방강제운전 / 14 / 1 / 비트쓰기 / 난방강제운전
+  # heating_forced_operation
+난방오토모드 / 14 / 0 / 비트쓰기 / 난방오토모드
+  # heating_auto_mode
+난방OFF습도설정 / 15 / 2~15 / 비트범위쓰기 / 난방 OFF 습도설정값
+  # heating_off_humidity_setting
+난방습도조건사용 / 15 / 1 / 비트쓰기 / 난방습도조건사용
+  # heating_humidity_condition_enable
+난방온도조건사용 / 15 / 0 / 비트쓰기 / 난방온도조건사용
+  # heating_temperature_condition_enable
+난방ON온도설정 / 16 / 0~15 / 레지스터쓰기 / 난방 ON 온도설정값
+  # heating_on_temperature_setting
+난방OFF온도설정 / 17 / 0~15 / 레지스터쓰기 / 난방 OFF 온도설정값
+  # heating_off_temperature_setting
+제습ON설정 / 18 / 1~15 / 비트범위쓰기 / 제습 ON설정값
+  # dehumidifier_on_setting
+제습오토모드 / 18 / 0 / 비트쓰기 / 제습오토모드
+  # dehumidifier_auto_mode
+제습OFF설정 / 19 / 1~15 / 비트범위쓰기 / 제습 OFF설정값
+  # dehumidifier_off_setting
+제습강제운전 / 19 / 0 / 비트쓰기 / 제습강제운전
+  # dehumidifier_forced_operation
+우측닫기모드 / 20 / 15 / 비트쓰기 / 우측닫기모드
+  # right_close_mode
+우측열기모드 / 20 / 14 / 비트쓰기 / 우측열기모드
+  # right_open_mode
+우측오토모드 / 20 / 13 / 비트쓰기 / 우측오토모드
+  # right_auto_mode
+좌측닫기모드 / 20 / 12 / 비트쓰기 / 좌측닫기모드
+  # left_close_mode
+좌측열기모드 / 20 / 11 / 비트쓰기 / 좌측열기모드
+  # left_open_mode
+좌측오토모드 / 20 / 10 / 비트쓰기 / 좌측오토모드
+  # left_auto_mode
+천장고습열림설정 / 20 / 0~9 / 비트범위쓰기 / 천장 고습열림 설정값
+  # roof_high_humidity_open_setting
+사용안함일때비오면닫기 / 21 / 15 / 비트쓰기 / 사용안함일때 비오면 닫기기능
+  # close_on_rain_when_disabled
+강제열기일때비오면닫기 / 21 / 14 / 비트쓰기 / 강제열기일때 비오면 닫기기능
+  # close_on_rain_when_forced_open
+천장개폐온도차조건사용 / 21 / 13 / 비트쓰기 / 천장개폐 온도차조건사용
+  # roof_temperature_diff_condition_enable
+천장개폐습도조건사용 / 21 / 12 / 비트쓰기 / 천장개폐 습도조건사용
+  # roof_humidity_condition_enable
+천장개폐온도조건사용 / 21 / 11 / 비트쓰기 / 천장개폐 온도조건사용
+  # roof_temperature_condition_enable
+천장개폐풍속조건사용 / 21 / 10 / 비트쓰기 / 천장개폐 풍속조건 사용
+  # roof_wind_speed_condition_enable
+천장개폐시간조건사용 / 21 / 9 / 비트쓰기 / 천장개폐 시간조건 사용
+  # roof_time_condition_enable
+열기닫기편차온도 / 21 / 0~8 / 비트범위쓰기 / 열기닫기 편차온도
+  # open_close_temperature_deviation
+고습열림설정값 / 22 / 0~15 / 레지스터쓰기 / 고습열림 설정값
+  # high_humidity_open_setting_value
+온도차조건열기닫기편차온도 / 23 / 0~15 / 레지스터쓰기 / 온도차 조건 사용시 열기 닫기 편차온도
+  # temperature_diff_open_close_deviation
+온도차열기설정값 / 24 / 0~15 / 레지스터쓰기 / 온도차 열기 설정값
+  # temperature_diff_open_setting_value
+열림설정온도 / 25 / 0~15 / 레지스터쓰기 / 열림 설정온도
+  # open_temperature_setting
+닫힘설정온도 / 26 / 0~15 / 레지스터쓰기 / 닫힘 설정온도
+  # close_temperature_setting
+천장개폐닫힘시간 / 27 / 8~15 / 비트범위쓰기 / 천장개폐 닫힘시간
+  # roof_close_time
+천장개폐열림시간 / 27 / 0~7 / 비트범위쓰기 / 천장개폐 열림시간
+  # roof_open_time
+사용안함일때강풍이면닫기사용 / 28 / 15 / 비트쓰기 / 사용안함일 때 강풍이면 닫기사용
+  # close_on_strong_wind_when_disabled
+강풍닫기편차 / 28 / 8~14 / 비트범위쓰기 / 강풍닫기 편차
+  # strong_wind_close_deviation
+강제열기일때강풍이면닫기사용 / 28 / 7 / 비트쓰기 / 강제열기일 때 강풍이면 닫기사용
+  # close_on_strong_wind_when_forced_open
+강풍닫기설정풍속 / 28 / 0~6 / 비트범위쓰기 / 강풍닫기 설정풍속
+  # strong_wind_close_wind_speed_setting
+보온커튼시간조건사용 / 29 / 15 / 비트쓰기 / 보온커튼시간조건사용
+  # insulation_curtain_time_condition_enable
+보온커튼온도조건사용 / 29 / 14 / 비트쓰기 / 보온커튼온도조건사용
+  # insulation_curtain_temperature_condition_enable
+사용안함_29 / 29 / 13 / 비트쓰기 / 사용안함
+  # unused_29
+보온커튼닫힘시각 / 29 / 8~12 / 비트범위쓰기 / 보온커튼 닫힘 시각
+  # insulation_curtain_close_time
+상부보온커튼닫기모드 / 29 / 7 / 비트쓰기 / 상부보온커튼 닫기모드
+  # upper_insulation_curtain_close_mode
+상부보온커튼열기모드 / 29 / 6 / 비트쓰기 / 상부보온커튼 열기모드
+  # upper_insulation_curtain_open_mode
+상부보온커튼오토모드 / 29 / 5 / 비트쓰기 / 상부보온커튼 오토모드
+  # upper_insulation_curtain_auto_mode
+보온커튼열림시각 / 29 / 0~4 / 비트범위쓰기 / 보온커튼 열림시각
+  # insulation_curtain_open_time
+사용안함_30 / 30 / 3~15 / 비트범위쓰기 / 사용안함
+  # unused_30
+측면보온커튼닫기모드 / 30 / 2 / 비트쓰기 / 측면보온커튼 닫기모드
+  # side_insulation_curtain_close_mode
+측면보온커튼열기모드 / 30 / 1 / 비트쓰기 / 측면보온커튼 열기모드
+  # side_insulation_curtain_open_mode
+측면보온커튼오토모드 / 30 / 0 / 비트쓰기 / 측면보온커튼 오토모드
+  # side_insulation_curtain_auto_mode
+보온커튼열림온도설정 / 31 / 0~15 / 레지스터쓰기 / 보온커튼 열림온도설정
+  # insulation_curtain_open_temperature_setting
+보온커튼닫힘온도설정 / 32 / 0~15 / 레지스터쓰기 / 보온커튼 닫힘온도설정
+  # insulation_curtain_close_temperature_setting
+보온커튼열기닫기편차온도 / 33 / 0~15 / 레지스터쓰기 / 보온커튼 열기닫기 편차온도
+  # insulation_curtain_open_close_temperature_deviation
+상부보온커튼전체이동시간설정 / 34 / 0~15 / 레지스터쓰기 / 상부보온커튼 전체이동시간 설정
+  # upper_insulation_curtain_total_travel_time_setting
+상부보온커튼열림제한비율 / 35 / 0~15 / 레지스터쓰기 / 상부보온커튼 열림제한비율
+  # upper_insulation_curtain_open_limit_ratio
+측면보온커튼전체이동시간설정 / 36 / 0~15 / 레지스터쓰기 / 측면보온커튼 전체이동시간 설정
+  # side_insulation_curtain_total_travel_time_setting
+측면보온커튼열림제한비율 / 37 / 0~15 / 레지스터쓰기 / 측면보온커튼 열림제한비율
+  # side_insulation_curtain_open_limit_ratio
+차광커튼시간조건사용 / 38 / 15 / 비트쓰기 / 차광커튼시간조건사용
+  # shading_curtain_time_condition_enable
+차광커튼온도조건사용 / 38 / 14 / 비트쓰기 / 차광커튼온도조건사용
+  # shading_curtain_temperature_condition_enable
+사용안함_38 / 38 / 13 / 비트쓰기 / 사용안함
+  # unused_38
+차광커튼닫힘시각 / 38 / 8~12 / 비트범위쓰기 / 차광커튼 닫힘시각
+  # shading_curtain_close_time
+차광커튼닫기모드 / 38 / 7 / 비트쓰기 / 차광커튼 닫기모드
+  # shading_curtain_close_mode
+차광커튼열기모드 / 38 / 6 / 비트쓰기 / 차광커튼 열기모드
+  # shading_curtain_open_mode
+차광커튼오토모드 / 38 / 5 / 비트쓰기 / 차광커튼 오토모드
+  # shading_curtain_auto_mode
+차광커튼열림시각 / 38 / 0~4 / 비트범위쓰기 / 차광커튼 열림시각
+  # shading_curtain_open_time
+일사센서조건사용 / 39 / 15 / 비트쓰기 / 일사센서조건사용
+  # solar_radiation_sensor_condition_enable
+차광커튼전체이동시간 / 39 / 0~14 / 비트범위쓰기 / 차광커튼 전체이동시간
+  # shading_curtain_total_travel_time
+차광커튼고온열림설정온도 / 40 / 0~15 / 레지스터쓰기 / 차광커튼 고온열림 설정온도
+  # shading_curtain_high_temperature_open_setting
+차광커튼닫힘일사량설정 / 41 / 0~15 / 레지스터쓰기 / 차광커튼 닫힘일사량 설정
+  # shading_curtain_close_solar_radiation_setting
+차광커튼일사센서열기닫기편차값 / 42 / 0~15 / 레지스터쓰기 / 차광커튼 일사센서에 의한 열기 닫기 편차값
+  # shading_curtain_solar_sensor_open_close_deviation
+차광커튼고온열기닫기편차값 / 43 / 0~15 / 레지스터쓰기 / 차광커튼 고온에 의한 열기 닫기 편차값
+  # shading_curtain_high_temp_open_close_deviation
+차광커튼열림제한비율 / 44 / 0~15 / 레지스터쓰기 / 차광커튼 열림제한비율
+  # shading_curtain_open_limit_ratio
+조명온시각분 / 45 / 8~15 / 비트범위쓰기 / 조명 온시각 분
+  # lighting_on_time_minute
+조명온시각시 / 45 / 1~7 / 비트범위쓰기 / 조명 온시각 시
+  # lighting_on_time_hour
+조명오토모드 / 45 / 0 / 비트쓰기 / 조명오토모드
+  # lighting_auto_mode
+조명오프시각분 / 46 / 8~15 / 비트범위쓰기 / 조명 오프시각 분
+  # lighting_off_time_minute
+조명오프시각시 / 46 / 1~7 / 비트범위쓰기 / 조명 오프시각 시
+  # lighting_off_time_hour
+조명강제운전 / 46 / 0 / 비트쓰기 / 조명강제운전
+  # lighting_forced_operation
+내부온도센서보정값 / 47 / 0~15 / 레지스터쓰기 / 내부온도 센서 보정값
+  # internal_temperature_sensor_calibration
+내부습도센서보정값 / 48 / 0~15 / 레지스터쓰기 / 내부습도 센서 보정값
+  # internal_humidity_sensor_calibration
+내부일사센서보정값 / 49 / 0~15 / 레지스터쓰기 / 내부 일사센서 보정값
+  # internal_solar_radiation_sensor_calibration
+내부함수율센서보정값 / 50 / 0~15 / 레지스터쓰기 / 내부 함수율 센서 보정값
+  # internal_moisture_sensor_calibration
+내부수분장력센서보정값 / 51 / 0~15 / 레지스터쓰기 / 내부 수분장력센서 보정값
+  # internal_soil_tension_sensor_calibration
+외부온도센서보정값 / 52 / 0~15 / 레지스터쓰기 / 외부온도센서 보정값
+  # external_temperature_sensor_calibration
+외부습도센서보정값 / 53 / 0~15 / 레지스터쓰기 / 외부습도센서 보정값
+  # external_humidity_sensor_calibration
+외부일사센서보정값 / 54 / 0~15 / 레지스터쓰기 / 외부 일사센서 보정값
+  # external_solar_radiation_sensor_calibration
+외부풍향센서보정값 / 55 / 0~15 / 레지스터쓰기 / 외부 풍향센서 보정값
+  # external_wind_direction_sensor_calibration
+외부풍속센서보정값 / 56 / 0~15 / 레지스터쓰기 / 외부 풍속센서 보정값
+  # external_wind_speed_sensor_calibration
+외부센서통신주소 / 57 / 8~15 / 비트범위쓰기 / 외부센서 통신주소
+  # external_sensor_communication_address
+내부센서통신주소 / 57 / 0~7 / 비트범위쓰기 / 내부센서 통신주소
+  # internal_sensor_communication_address
+reserved_58 / 58 / 0~15 / 레지스터쓰기 / reserved
+  # reserved_58
+reserved_59 / 59 / 0~15 / 레지스터쓰기 / reserved
+  # reserved_59
+IO보드통신체크 / 60 / - / 레지스터읽기 / IO보드 통신 체크 (100=연결끊김)
+  # io_board_communication_check
+PCB주위현재온도 / 61 / - / 레지스터읽기 / PCB 주위 현재온도 (°C, /10)
+  # pcb_current_temperature
+현재시각_시 / 62 / - / 레지스터읽기 / 현재시각 (시)
+  # current_time_hour
+현재시각_분 / 63 / - / 레지스터읽기 / 현재 분
+  # current_time_minute
+현재시각_초 / 64 / - / 레지스터읽기 / 현재 초
+  # current_time_second
+유동팬습도조건출력중 / 65 / 15 / 비트읽기 / 유동팬습도조건에 의한 출력중
+  # circulation_fan_humidity_condition_output_active
+유동팬온도조건출력중 / 65 / 14 / 비트읽기 / 유동팬온도조건에 의한 출력중
+  # circulation_fan_temperature_condition_output_active
+차광열림출력표시 / 65 / 13 / 비트읽기 / 차광 열림출력 표시
+  # shading_open_output_indicator
+차광닫힘출력표시 / 65 / 12 / 비트읽기 / 차광 닫힘출력 표시
+  # shading_close_output_indicator
+상부보온열림출력표시 / 65 / 11 / 비트읽기 / 상부보온 열림출력 표시
+  # upper_insulation_open_output_indicator
+상부보온닫힘출력표시 / 65 / 10 / 비트읽기 / 상부보온 닫힘출력 표시
+  # upper_insulation_close_output_indicator
+천장우단열림출력표시 / 65 / 9 / 비트읽기 / 천장우단 열림출력 표시
+  # roof_right_end_open_output_indicator
+천장우열림출력표시 / 65 / 8 / 비트읽기 / 천장우 열림출력 표시
+  # roof_right_open_output_indicator
+천장좌단열림출력표시 / 65 / 7 / 비트읽기 / 천장좌단 열림출력 표시
+  # roof_left_end_open_output_indicator
+천장좌열림출력표시 / 65 / 6 / 비트읽기 / 천장좌 열림출력 표시
+  # roof_left_open_output_indicator
+제습출력표시 / 65 / 5 / 비트읽기 / 제습출력 표시
+  # dehumidifier_output_indicator
+난방출력표시 / 65 / 4 / 비트읽기 / 난방출력 표시
+  # heating_output_indicator
+관수출력표시 / 65 / 3 / 비트읽기 / 관수출력 표시
+  # irrigation_output_indicator
+유동팬출력표시 / 65 / 2 / 비트읽기 / 유동팬출력 표시
+  # circulation_fan_output_indicator
+PCB온도센서에러 / 65 / 1 / 비트읽기 / PCB온도센서 에러
+  # pcb_temperature_sensor_error
+생정초기화체크 / 65 / 0 / 비트읽기 / 생정초기화 체크
+  # factory_reset_check
+관수중 / 66 / 15 / 비트읽기 / 관수 중
+  # irrigation_in_progress
+감우센서감지중 / 66 / 14 / 비트읽기 / 감우센서 감지중
+  # rain_sensor_detecting
+차광일사센서출력중 / 66 / 13 / 비트읽기 / 차광:일사센서에 의한 출력중
+  # shading_solar_sensor_output_active
+차광시간조건출력중 / 66 / 12 / 비트읽기 / 차광:시간조건에 의한 출력중
+  # shading_time_condition_output_active
+차광온도조건출력중 / 66 / 11 / 비트읽기 / 차광:온도조건에 의한 출력중
+  # shading_temperature_condition_output_active
+보온시간조건출력중 / 66 / 10 / 비트읽기 / 보온:시간조건에 의한 출력중
+  # insulation_time_condition_output_active
+보온온도조건출력중 / 66 / 9 / 비트읽기 / 보온:온도조건에 의한 출력중
+  # insulation_temperature_condition_output_active
+천장좌감우조건출력중 / 66 / 8 / 비트읽기 / 천장좌:감우조건에 의한 출력중
+  # roof_left_rain_condition_output_active
+천장좌온도차조건출력중 / 66 / 7 / 비트읽기 / 천장좌:온도차조건에 의한 출력중
+  # roof_left_temperature_diff_condition_output_active
+천장좌습도조건출력중 / 66 / 6 / 비트읽기 / 천장좌:습도조건에 의한 출력중
+  # roof_left_humidity_condition_output_active
+천장좌온도조건출력중 / 66 / 5 / 비트읽기 / 천장좌:온도조건에 의한 출력중
+  # roof_left_temperature_condition_output_active
+난방습도조건출력중 / 66 / 4 / 비트읽기 / 난방:습도조건에 의한 출력중
+  # heating_humidity_condition_output_active
+난방온도조건출력중 / 66 / 3 / 비트읽기 / 난방:온도조건에 의한 출력중
+  # heating_temperature_condition_output_active
+관수시간조건출력중 / 66 / 2 / 비트읽기 / 관수:시간조건에 의한 출력중
+  # irrigation_time_condition_output_active
+관수함수율출력중 / 66 / 1 / 비트읽기 / 관수:함수율에 의한 출력중
+  # irrigation_moisture_output_active
+유동팬시간조건출력중 / 66 / 0 / 비트읽기 / 유동팬:시간조건에 의한 출력중
+  # circulation_fan_time_condition_output_active
+reserved_67_15 / 67 / 15 / 비트읽기 / reserved
+  # reserved_67_15
+측면보온커튼닫힘출력표시 / 67 / 14 / 비트읽기 / 측면보온커튼 닫힘출력 표시
+  # side_insulation_curtain_close_output_indicator
+측면보온커튼열림출력표시 / 67 / 13 / 비트읽기 / 측면보온커튼 열림출력 표시
+  # side_insulation_curtain_open_output_indicator
+천장우풍속출력중 / 67 / 12 / 비트읽기 / 천장우 풍속에 의한 출력중
+  # roof_right_wind_speed_output_active
+천장우시간출력중 / 67 / 11 / 비트읽기 / 천장우 시간에 의한 출력중
+  # roof_right_time_output_active
+천장좌풍속출력중 / 67 / 10 / 비트읽기 / 천장좌 풍속에 의한 출력중
+  # roof_left_wind_speed_output_active
+천장좌시간출력중 / 67 / 9 / 비트읽기 / 천장좌 시간에 의한 출력중
+  # roof_left_time_output_active
+조명출력표시 / 67 / 8 / 비트읽기 / 조명출력 표시
+  # lighting_output_indicator
+천장우감우조건출력중 / 67 / 7 / 비트읽기 / 천장우:감우조건에 의한 출력중
+  # roof_right_rain_condition_output_active
+천장우온도차조건출력중 / 67 / 6 / 비트읽기 / 천장우:온도차조건에 의한 출력중
+  # roof_right_temperature_diff_condition_output_active
+천장우습도조건출력중 / 67 / 5 / 비트읽기 / 천장우:습도조건에 의한 출력중
+  # roof_right_humidity_condition_output_active
+천장우온도조건출력중 / 67 / 4 / 비트읽기 / 천장우:온도조건에 의한 출력중
+  # roof_right_temperature_condition_output_active
+관수반복횟수표시 / 67 / 3 / 비트읽기 / 관수 반복 몇회 중인지 표시
+  # irrigation_repeat_count_indicator
+reserved_67_2 / 67 / 2 / 비트읽기 / reserved
+  # reserved_67_2
+reserved_67_1 / 67 / 1 / 비트읽기 / reserved
+  # reserved_67_1
+reserved_67_0 / 67 / 0 / 비트읽기 / reserved
+  # reserved_67_0
+내부센서정보_15 / 68 / 15 / 비트읽기 / 내부센서 정보
+  # internal_sensor_info_15
+내부센서정보_14 / 68 / 14 / 비트읽기 / 내부센서 정보
+  # internal_sensor_info_14
+내부센서시간출력중 / 68 / 13 / 비트읽기 / 내부센서 시간에의한출력중
+  # internal_sensor_time_output_active
+내부센서온도출력중 / 68 / 12 / 비트읽기 / 내부센서 온도에의한출력중
+  # internal_sensor_temperature_output_active
+내부수분장력센서에러 / 68 / 11 / 비트읽기 / 내부수분장력센서 에러
+  # internal_soil_tension_sensor_error
+내부함수율센서에러 / 68 / 10 / 비트읽기 / 내부함수율센서에러
+  # internal_moisture_sensor_error
+내부일사센서에러 / 68 / 9 / 비트읽기 / 내부일사센서에러
+  # internal_solar_radiation_sensor_error
+내부습도센서에러 / 68 / 8 / 비트읽기 / 내부습도센서에러
+  # internal_humidity_sensor_error
+내부온도센서에러 / 68 / 7 / 비트읽기 / 내부온도센서에러
+  # internal_temperature_sensor_error
+내부수분장력센서디바이스에러 / 68 / 6 / 비트읽기 / 내부수분장력센서 디바이스정보에러
+  # internal_soil_tension_sensor_device_error
+내부함수율센서디바이스에러 / 68 / 5 / 비트읽기 / 내부함수율센서 디바이스정보에러
+  # internal_moisture_sensor_device_error
+내부일사센서디바이스에러 / 68 / 4 / 비트읽기 / 내부일사센서 디바이스정보에러
+  # internal_solar_radiation_sensor_device_error
+내부습도센서디바이스에러 / 68 / 3 / 비트읽기 / 내부습도센서 디바이스정보에러
+  # internal_humidity_sensor_device_error
+내부온도센서디바이스에러 / 68 / 2 / 비트읽기 / 내부온도센서 디바이스정보에러
+  # internal_temperature_sensor_device_error
+내부센서노드에러 / 68 / 1 / 비트읽기 / 내부센서 노드정보에러
+  # internal_sensor_node_error
+내부센서통신에러 / 68 / 0 / 비트읽기 / 내부센서 통신에러
+  # internal_sensor_communication_error
+외부센서정보_15 / 69 / 15 / 비트읽기 / 외부센서 정보
+  # external_sensor_info_15
+외부센서정보_14 / 69 / 14 / 비트읽기 / 외부센서 정보
+  # external_sensor_info_14
+외부센서에러 / 69 / 13 / 비트읽기 / 외부센서에러
+  # external_sensor_error
+외부풍속센서에러 / 69 / 12 / 비트읽기 / 외부풍속센서에러
+  # external_wind_speed_sensor_error
+외부풍향센서에러 / 69 / 11 / 비트읽기 / 외부풍향센서에러
+  # external_wind_direction_sensor_error
+외부일사센서에러 / 69 / 10 / 비트읽기 / 외부일사센서에러
+  # external_solar_radiation_sensor_error
+외부습도센서에러 / 69 / 9 / 비트읽기 / 외부습도센서에러
+  # external_humidity_sensor_error
+외부온도센서에러 / 69 / 8 / 비트읽기 / 외부온도센서에러
+  # external_temperature_sensor_error
+외부감우센서에러 / 69 / 7 / 비트읽기 / 외부감우센서에러
+  # external_rain_sensor_error
+외부풍속센서디바이스에러 / 69 / 6 / 비트읽기 / 외부풍속센서 디바이스정보에러
+  # external_wind_speed_sensor_device_error
+외부풍향센서디바이스에러 / 69 / 5 / 비트읽기 / 외부풍향센서 디바이스정보에러
+  # external_wind_direction_sensor_device_error
+외부일사센서디바이스에러 / 69 / 4 / 비트읽기 / 외부일사센서 디바이스정보에러
+  # external_solar_radiation_sensor_device_error
+외부습도센서디바이스에러 / 69 / 3 / 비트읽기 / 외부습도센서 디바이스정보에러
+  # external_humidity_sensor_device_error
+외부온도센서디바이스에러 / 69 / 2 / 비트읽기 / 외부온도센서 디바이스정보에러
+  # external_temperature_sensor_device_error
+외부센서노드에러 / 69 / 1 / 비트읽기 / 외부센서 노드정보에러
+  # external_sensor_node_error
+외부센서통신에러 / 69 / 0 / 비트읽기 / 외부센서 통신에러
+  # external_sensor_communication_error
+내부현재온도 / 70 / - / 레지스터읽기 / 내부 현재온도 (°C, /10)
+  # indoor_current_temperature
+내부현재습도 / 71 / - / 레지스터읽기 / 내부 현재습도 (%, /10)
+  # indoor_current_humidity
+내부현재일사량 / 72 / - / 레지스터읽기 / 내부 현재일사량 (W/m²)
+  # indoor_current_solar_radiation
+내부현재함수율 / 73 / - / 레지스터읽기 / 내부 현재 함수율 (%)
+  # indoor_current_moisture
+내부현재수분장력 / 74 / - / 레지스터읽기 / 내부 현재 수분장력 (kPa)
+  # indoor_current_soil_tension
+외부현재온도 / 75 / - / 레지스터읽기 / 외부 현재온도 (°C, /10)
+  # outdoor_current_temperature
+외부현재습도 / 76 / - / 레지스터읽기 / 외부 현재습도 (%, /10)
+  # outdoor_current_humidity
+외부일사량 / 77 / - / 레지스터읽기 / 외부 일사량 (W/m²)
+  # outdoor_solar_radiation
+외부현재증발강 / 78 / - / 레지스터읽기 / 외부 현재 증발강
+  # outdoor_current_evaporation
+외부현재증속감 / 79 / - / 레지스터읽기 / 외부 현재 증속감
+  # outdoor_current_evaporation_rate
+다습관수남은시간 / 80,81 / - / 레지스터읽기 / 다습관수 까지 남은시간 (초, 2워드)
+  # time_remaining_until_next_irrigation
+상부보온커튼이동량 / 82 / - / 레지스터읽기 / 상부보온커튼 현재 이동량 (초)
+  # upper_insulation_curtain_current_position
+측면보온커튼이동량 / 83 / - / 레지스터읽기 / 측면보온커튼 현재 이동량 (초)
+  # side_insulation_curtain_current_position
+차광커튼이동량 / 84 / - / 레지스터읽기 / 차광커튼 현재 이동량 (초)
+  # shading_curtain_current_position
+
+
+================================================================================
+통계
+================================================================================
+전체 항목: 183개 (워드주소 0~84)
+  - 레지스터 읽기: 45개
+  - 비트 읽기: 117개
+  - 비트 범위 읽기: 28개
+
+
+================================================================================
+연결 정보
+================================================================================
+IP: 168.131.153.52
+PORT: 9139
+UNIT_ID: 1
+
+
+================================================================================

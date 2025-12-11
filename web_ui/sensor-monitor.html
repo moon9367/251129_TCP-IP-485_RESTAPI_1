@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>센서 모니터 - 스마트팜 데시보드</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="api-config.js"></script>
+    <script src="sensor-charts.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="사이드바 토글">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="brand"><span>🌱</span>AISEED FARM ONE</div>
+        <nav>
+          <ul>
+            <li><a href="index.html"><div class="icon">📊</div><span>데시보드</span></a></li>
+            <li class="active"><a href="sensor-monitor.html"><div class="icon">🛰️</div><span>센서 모니터</span></a></li>
+            <li><a href="monitoring.html"><div class="icon">📹</div><span>모니터링</span></a></li>
+            <li><a href="control-schedule.html"><div class="icon">🧭</div><span>제어 스케줄</span></a></li>
+            <li><a href="notifications.html"><div class="icon">🔔</div><span>알림 센터</span></a></li>
+            <li><a href="reports.html"><div class="icon">🗂️</div><span>리포트 & 로그</span></a></li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          실시간 데이터 수집 <strong>ON</strong><br />
+          최근 업데이트: 오늘 오후 08:51
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>센서 모니터</h1>
+            <p>실시간 센서 데이터 그래프 · 24시간 추세 분석</p>
+          </div>
+          <div class="top-actions">
+            <button>데이터 새로고침</button>
+            <button>설정</button>
+          </div>
+        </header>
+
+        <main class="content">
+          <section>
+            <div class="section-heading">
+              <h2>내부 센서 · 온도</h2>
+              <span>최근 갱신: -- · 목표 범위: --</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder" style="position: relative; height: 280px;">
+                <canvas id="chartTemp"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>내부 센서 · 습도</h2>
+              <span>최근 갱신: -- · 목표 범위: --</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder" style="position: relative; height: 280px;">
+                <canvas id="chartHumidity"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>내부 센서 · 일사량</h2>
+              <span>최근 갱신: -- · 목표: --</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder" style="position: relative; height: 280px;">
+                <canvas id="chartSolar"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>토양 센서 · 수분 함수율</h2>
+              <span>최근 갱신: -- · 목표 범위: --</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder" style="position: relative; height: 280px;">
+                <canvas id="chartSoilMoisture"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>토양 센서 · 수분 장력</h2>
+              <span>최근 갱신: -- · 임계치: --</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-placeholder" style="position: relative; height: 280px;">
+                <canvas id="chartSoilTension"></canvas>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer>© 2025 AISEED FARM ONE · 실증 서비스 버전 0.9.3</footer>
+      </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+      // 센서 모니터 페이지에서만 초기화
+      if (typeof sensorChartsManager !== 'undefined') {
+        sensorChartsManager.init();
+      }
+    </script>
+  </body>
+</html>
+

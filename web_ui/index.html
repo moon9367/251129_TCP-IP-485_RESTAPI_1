@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>스마트팜 데시보드</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="data-manager.js"></script>
+    <script src="chart-manager.js"></script>
+    
+    <!-- 직접 센서 데이터 로딩 (백업) -->
+    <script>
+      //const API_SERVER = 'http://192.168.0.14:8000';
+      const API_SERVER = 'https://normally-roman-jaguar-reflects.trycloudflare.com';  // Cloudflare Tunnel
+      // const API_SERVER = 'http://192.168.0.14:8000';  // 로컬 네트워크 (주석처리)
+      let autoRefreshTimer = null;
+      
+      // 센서 데이터 로드 및 UI 업데이트
+      async function loadAndUpdateSensors() {
+        try {
+          const response = await fetch(`${API_SERVER}/api/sensors/all`);
+          const data = await response.json();
+          
+          if (data.success && data.sensors) {
+            const sensors = data.sensors;
+            
+            // 센서 개수 및 오류 카운트 (10개 센서 확인)
+            let totalSensors = 0;
+            let errorCount = 0;
+            
+            const sensorList = [
+              sensors.indoor_current_temperature,
+              sensors.indoor_current_humidity,
+              sensors.indoor_current_solar_radiation,
+              sensors.indoor_current_moisture,
+              sensors.indoor_current_soil_tension,
+              sensors.outdoor_current_temperature,
+              sensors.outdoor_current_humidity,
+              sensors.outdoor_solar_radiation,
+              sensors.outdoor_current_evaporation,
+              sensors.outdoor_current_evaporation_rate
+            ];
+            
+            sensorList.forEach(sensor => {
+              if (sensor) {
+                totalSensors++;
+                // 값이 null이거나 undefined이거나 NaN이면 오류로 카운트
+                if (sensor.value === null || sensor.value === undefined || isNaN(sensor.value)) {
+                  errorCount++;
+                }
+              }
+            });
+            
+            // 센서 개수 및 오류 표시 업데이트
+            const sensorCountEl = document.getElementById('sensor-count');
+            const sensorErrorsEl = document.getElementById('sensor-errors');
+            if (sensorCountEl) sensorCountEl.textContent = totalSensors;
+            if (sensorErrorsEl) sensorErrorsEl.textContent = errorCount;
+            
+            // 내부 센서 업데이트
+            updateSensorValue('indoor_temp', sensors.indoor_current_temperature?.value, '℃');
+            updateSensorValue('indoor_humidity', sensors.indoor_current_humidity?.value, '%');
+            updateSensorValue('indoor_solar', sensors.indoor_current_solar_radiation?.value, ' W/㎡');
+            updateSensorValue('indoor_moisture', sensors.indoor_current_moisture?.value, '%');
+            updateSensorValue('indoor_soil_tension', sensors.indoor_current_soil_tension?.value, ' kPa');
+            
+            // 외부 센서 업데이트
+            updateSensorValue('outdoor_temp', sensors.outdoor_current_temperature?.value, '℃');
+            updateSensorValue('outdoor_humidity', sensors.outdoor_current_humidity?.value, '%');
+            updateSensorValue('outdoor_solar', sensors.outdoor_solar_radiation?.value, ' W/㎡');
+            
+            console.log(`✅ 센서 데이터 업데이트 완료! (${totalSensors}개 센서, ${errorCount}건 오류)`);
+          }
+        } catch (error) {
+          console.error('❌ 센서 로드 실패:', error);
+        }
+        
+        // 시스템 상태 확인 (IO보드 통신 체크)
+        try {
+          // REGISTER_READ 타입이므로 /api/status/ 사용
+          const statusResponse = await fetch(`${API_SERVER}/api/status/io_board_communication_check`);
+          const statusData = await statusResponse.json();
+          
+          console.log('🔍 시스템 상태 응답:', statusData);
+          
+          if (statusData.success && statusData.value !== undefined && statusData.value !== null) {
+            const systemStatusEl = document.getElementById('system-status');
+            if (systemStatusEl) {
+              // 100 = 연결 끊김, 그 외 = 정상
+              if (statusData.value === 100) {
+                systemStatusEl.textContent = '⚠️ 연결 끊김';
+                systemStatusEl.style.color = 'var(--red)';
+                console.log('⚠️ 시스템 상태: 연결 끊김 (값: 100)');
+              } else {
+                systemStatusEl.textContent = '✅ 정상';
+                systemStatusEl.style.color = 'var(--green)';
+                console.log(`✅ 시스템 상태: 정상 (값: ${statusData.value})`);
+              }
+            }
+          } else {
+            console.warn('⚠️ 시스템 상태 데이터 없음:', statusData);
+          }
+        } catch (error) {
+          console.error('❌ 시스템 상태 확인 실패:', error);
+        }
+      }
+      
+      // 실시간 날짜 업데이트
+      function updateCurrentDate() {
+        const now = new Date();
+        const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const dayOfWeek = days[now.getDay()];
+        
+        const dateStr = `${year}년 ${month}월 ${date}일 ${dayOfWeek}`;
+        const dateEl = document.getElementById('current-date-info');
+        if (dateEl) {
+          dateEl.innerHTML = `${dateStr} · 실시간 업데이트 · 나주 대실마을 온실 A동`;
+        }
+      }
+      
+      // 나주시 날씨 정보 로드
+      async function loadWeatherInfo() {
+        try {
+          console.log('🌤 날씨 정보 로드 시작...');
+          const weatherURL = `${API_SERVER}/api/weather/naju`;
+          console.log('📡 날씨 API URL:', weatherURL);
+          
+          const response = await fetch(weatherURL);
+          console.log('📥 날씨 API 응답 상태:', response.status);
+          
+          const data = await response.json();
+          console.log('📦 날씨 API 응답 데이터:', data);
+          
+          if (data.success) {
+            // 날씨 상태 업데이트
+            const weatherStatusEl = document.getElementById('weather-status');
+            const feelsLikeTempEl = document.getElementById('feels-like-temp');
+            
+            if (weatherStatusEl) {
+              weatherStatusEl.textContent = `${data.weather_icon} ${data.weather_text.replace('나주시 ', '')}`;
+              console.log('✅ 날씨 상태 업데이트:', weatherStatusEl.textContent);
+            }
+            if (feelsLikeTempEl) {
+              feelsLikeTempEl.textContent = data.temperature;
+              console.log('✅ 온도 업데이트:', data.temperature);
+            }
+            
+            console.log(`✅ 날씨 정보 업데이트 완료: ${data.summary}`);
+          } else {
+            console.warn('⚠️ 날씨 정보 로드 실패:', data);
+            console.warn('💡 가능한 원인: 기상청 API 키 미승인 또는 오류');
+            console.warn('💡 확인: https://www.data.go.kr/iim/api/selectAPIAcountView.do');
+          }
+        } catch (error) {
+          console.error('❌ 날씨 정보 로드 오류:', error);
+          console.error('❌ 오류 상세:', error.message);
+        }
+      }
+      
+      // 센서 값 업데이트 헬퍼 함수
+      function updateSensorValue(sensorKey, value, unit) {
+        const card = document.querySelector(`[data-sensor="${sensorKey}"]`);
+        if (!card) return;
+        
+        const valueEl = card.querySelector('.value');
+        if (valueEl && value !== null && value !== undefined && !isNaN(value)) {
+          valueEl.textContent = `${value}${unit}`;
+        }
+      }
+      
+      // 페이지 로드 시 자동 시작
+      window.addEventListener('DOMContentLoaded', () => {
+        console.log('🚀 센서 데이터 로딩 시작!');
+        
+        // 실시간 날짜 업데이트
+        updateCurrentDate();
+        
+        // 날씨 정보 로드
+        loadWeatherInfo();
+        
+        // 즉시 한 번 로드
+        loadAndUpdateSensors();
+        
+        // 10초마다 센서 데이터 자동 새로고침
+        autoRefreshTimer = setInterval(loadAndUpdateSensors, 10000);
+        
+        // 15분마다 날씨 정보 자동 새로고침 (API 호출 제한 대응)
+        setInterval(loadWeatherInfo, 900000);
+        
+        console.log('✅ 자동 새로고침 시작 (센서: 10초, 날씨: 15분)');
+      });
+      
+      // 🎛️ 범용 제어 토글 함수 (난방, 유동팬, 제습기, LED조명, 관수)
+      async function toggleControl(toggleEl, deviceName) {
+        const card = toggleEl.closest('.control-card');
+        const isCurrentlyOff = toggleEl.classList.contains('off');
+        const chipEl = card.querySelector('.chip');
+        const statusEl = card.querySelector('.status-text');
+        const titleSpan = card.querySelector('.title span');
+        
+        const autoMode = toggleEl.getAttribute('data-auto');
+        const forcedMode = toggleEl.getAttribute('data-forced');
+        
+        // 장치별 아이콘 설정
+        const icons = {
+          '난방': '🔥',
+          '유동팬': '🌀',
+          '제습기': '💨',
+          'LED조명': '💡',
+          '관수': '🚰'
+        };
+        const icon = icons[deviceName] || '⚙️';
+        
+        try {
+          if (isCurrentlyOff) {
+            // 토글 ON: 자동 → 수동 강제운전
+            console.log(`${icon} ${deviceName}: 자동 → 수동 강제운전`);
+            
+            // 1. 오토모드 OFF
+            const autoResult = await fetch(`${API_SERVER}/api/settings/${autoMode}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ value: 0 })
+            });
+            
+            // 2. 강제운전 ON
+            const forcedResult = await fetch(`${API_SERVER}/api/settings/${forcedMode}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ value: 1 })
+            });
+            
+            if (autoResult.ok && forcedResult.ok) {
+              // UI 업데이트
+              toggleEl.classList.remove('off');
+              toggleEl.classList.add('on');
+              toggleEl.setAttribute('data-mode', '수동');
+              chipEl.textContent = '수동 강제';
+              chipEl.classList.remove('auto');
+              chipEl.classList.add('manual');
+              statusEl.textContent = 'ON';
+              statusEl.style.color = '#4ecca3';
+              titleSpan.textContent = '강제 운전 중';
+              
+              console.log(`✅ ${deviceName} 수동 모드 활성화`);
+            } else {
+              alert(`❌ ${deviceName} 제어 실패!`);
+            }
+            
+          } else {
+            // 토글 OFF: 수동 → 자동
+            console.log(`${icon} ${deviceName}: 수동 → 자동`);
+            
+            // 1. 강제운전 OFF
+            const forcedResult = await fetch(`${API_SERVER}/api/settings/${forcedMode}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ value: 0 })
+            });
+            
+            // 2. 오토모드 ON
+            const autoResult = await fetch(`${API_SERVER}/api/settings/${autoMode}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ value: 1 })
+            });
+            
+            if (autoResult.ok && forcedResult.ok) {
+              // UI 업데이트
+              toggleEl.classList.remove('on');
+              toggleEl.classList.add('off');
+              toggleEl.setAttribute('data-mode', '자동');
+              chipEl.textContent = '자동';
+              chipEl.classList.remove('manual');
+              chipEl.classList.add('auto');
+              statusEl.textContent = 'OFF';
+              statusEl.style.color = '#6c757d';
+              titleSpan.textContent = '자동 제어';
+              
+              console.log(`✅ ${deviceName} 자동 모드 활성화`);
+            } else {
+              alert(`❌ ${deviceName} 제어 실패!`);
+            }
+          }
+        } catch (error) {
+          console.error(`❌ ${deviceName} 제어 에러:`, error);
+          alert(`❌ ${deviceName} 제어 실패: ${error.message}`);
+        }
+      }
+      
+      // 🚰 관수 토글 제어 (하위 호환성)
+      function toggleIrrigation(toggleEl) {
+        return toggleControl(toggleEl, '관수');
+      }
+      
+      // 🪟 천창/커튼 제어 (열기/닫기/중단/전환)
+      // 전역 변수: 각 천창/커튼의 타이머와 취소 플래그 저장
+      const skylightTimers = {
+        '좌측': { intervalId: null, timeoutId: null, cancelFlag: false },
+        '우측': { intervalId: null, timeoutId: null, cancelFlag: false },
+        '천장보온': { intervalId: null, timeoutId: null, cancelFlag: false },
+        '측면보온': { intervalId: null, timeoutId: null, cancelFlag: false },
+        '차광': { intervalId: null, timeoutId: null, cancelFlag: false }
+      };
+      
+      async function operateSkylight(btnEl, side, action) {
+        const card = btnEl.closest('.control-card');
+        const statusEl = card.querySelector('.skylight-status');
+        const chipEl = card.querySelector('.chip');
+        const allBtns = card.querySelectorAll('.skylight-btn');
+        const footer = card.querySelector('footer');
+        
+        const autoMode = btnEl.getAttribute('data-auto');
+        const openMode = btnEl.getAttribute('data-open');
+        const closeMode = btnEl.getAttribute('data-close');
+        
+        const currentAction = card.getAttribute('data-current-action');
+        
+        // 🛑 현재 작동 중이면 중단 처리
+        if (currentAction && currentAction !== '') {
+          console.log(`⏸️ 천창 ${side}: 현재 작동(${currentAction}) 중단 중...`);
+          
+          // 타이머 취소
+          if (skylightTimers[side].intervalId) {
+            clearInterval(skylightTimers[side].intervalId);
+            skylightTimers[side].intervalId = null;
+          }
+          if (skylightTimers[side].timeoutId) {
+            clearTimeout(skylightTimers[side].timeoutId);
+            skylightTimers[side].timeoutId = null;
+          }
+          skylightTimers[side].cancelFlag = true;
+          
+          // 현재 모드 OFF
+          const currentMode = currentAction === 'open' ? openMode : closeMode;
+          await fetch(`${API_SERVER}/api/settings/${currentMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 0 })
+          });
+          
+          console.log(`✅ 천창 ${side}: ${currentAction} 모드 중단 완료`);
+        }
+        
+        // 🚀 새 작동 시작
+        card.setAttribute('data-current-action', action);
+        skylightTimers[side].cancelFlag = false;
+        
+        const isOpen = action === 'open';
+        const actionMode = isOpen ? openMode : closeMode;
+        const icon = isOpen ? '🔼' : '🔽';
+        const actionText = isOpen ? '열기' : '닫기';
+        
+        try {
+          console.log(`${icon} 천창 ${side}: ${actionText} 시작`);
+          
+          // 1️⃣ 오토모드 OFF
+          await fetch(`${API_SERVER}/api/settings/${autoMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 0 })
+          });
+          
+          // 2️⃣ 작동 모드 ON (열기 또는 닫기)
+          await fetch(`${API_SERVER}/api/settings/${actionMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 1 })
+          });
+          
+          // UI 업데이트
+          statusEl.textContent = `${icon} ${actionText} 중...`;
+          chipEl.textContent = '수동';
+          chipEl.classList.remove('auto');
+          chipEl.classList.add('manual');
+          
+          // 버튼을 "중단" 버튼으로 변경
+          footer.innerHTML = `
+            <button class="skylight-btn stop-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="stopSkylight(this, '${side}')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #ffa500; background: transparent; color: #ffa500; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              ⏸️ 중단
+            </button>
+            <button class="skylight-btn ${isOpen ? 'close-btn' : 'open-btn'}" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', '${isOpen ? 'close' : 'open'}')" 
+                    style="flex: 1; padding: 8px; border: 1px solid ${isOpen ? '#ff6b6b' : '#4ecca3'}; background: transparent; color: ${isOpen ? '#ff6b6b' : '#4ecca3'}; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              ${isOpen ? '🔽 닫기' : '🔼 열기'}
+            </button>
+          `;
+          
+          // 3️⃣ 3분 (180초) 대기 → 카운트다운 표시
+          let remainingSeconds = 180;
+          skylightTimers[side].intervalId = setInterval(() => {
+            if (skylightTimers[side].cancelFlag) {
+              clearInterval(skylightTimers[side].intervalId);
+              return;
+            }
+            
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            statusEl.textContent = `${icon} ${actionText} 중... ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            remainingSeconds--;
+            
+            if (remainingSeconds < 0) {
+              clearInterval(skylightTimers[side].intervalId);
+            }
+          }, 1000);
+          
+          // 3분 대기
+          await new Promise((resolve, reject) => {
+            skylightTimers[side].timeoutId = setTimeout(() => {
+              if (skylightTimers[side].cancelFlag) {
+                reject(new Error('Cancelled'));
+              } else {
+                resolve();
+              }
+            }, 180000); // 3분 = 180000ms
+          });
+          
+          if (skylightTimers[side].cancelFlag) {
+            throw new Error('Operation cancelled');
+          }
+          
+          clearInterval(skylightTimers[side].intervalId);
+          console.log(`⏰ 천창 ${side}: 3분 경과 → 자동 모드 전환`);
+          
+          // 4️⃣ 작동 모드 OFF
+          await fetch(`${API_SERVER}/api/settings/${actionMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 0 })
+          });
+          
+          // 5️⃣ 오토모드 ON
+          await fetch(`${API_SERVER}/api/settings/${autoMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 1 })
+          });
+          
+          // UI 업데이트: 자동 제어
+          statusEl.textContent = '자동 제어';
+          chipEl.textContent = '자동';
+          chipEl.classList.remove('manual');
+          chipEl.classList.add('auto');
+          
+          // 버튼 원래대로 복구
+          footer.innerHTML = `
+            <button class="skylight-btn open-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'open')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔼 열기
+            </button>
+            <button class="skylight-btn close-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'close')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔽 닫기
+            </button>
+          `;
+          
+          card.setAttribute('data-current-action', '');
+          console.log(`✅ 천창 ${side}: ${actionText} 완료 (자동 모드 복귀)`);
+          
+        } catch (error) {
+          if (error.message === 'Operation cancelled') {
+            console.log(`⏸️ 천창 ${side}: ${actionText} 중단됨`);
+            return; // 중단된 경우 에러로 처리하지 않음
+          }
+          
+          console.error(`❌ 천창 ${side} ${actionText} 에러:`, error);
+          alert(`❌ 천창 ${actionText} 실패: ${error.message}`);
+          statusEl.textContent = '❌ 오류 발생';
+          
+          // 버튼 원래대로 복구
+          footer.innerHTML = `
+            <button class="skylight-btn open-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'open')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔼 열기
+            </button>
+            <button class="skylight-btn close-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'close')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔽 닫기
+            </button>
+          `;
+          
+          card.setAttribute('data-current-action', '');
+        }
+      }
+      
+      // 🛑 천창 중단 (수동 중단)
+      async function stopSkylight(btnEl, side) {
+        const card = btnEl.closest('.control-card');
+        const statusEl = card.querySelector('.skylight-status');
+        const chipEl = card.querySelector('.chip');
+        const footer = card.querySelector('footer');
+        
+        const autoMode = btnEl.getAttribute('data-auto');
+        const openMode = btnEl.getAttribute('data-open');
+        const closeMode = btnEl.getAttribute('data-close');
+        
+        const currentAction = card.getAttribute('data-current-action');
+        
+        if (!currentAction || currentAction === '') {
+          console.warn(`⚠️ 천창 ${side}: 작동 중이 아님`);
+          return;
+        }
+        
+        try {
+          console.log(`⏸️ 천창 ${side}: 수동 중단 시작`);
+          
+          // 타이머 취소
+          if (skylightTimers[side].intervalId) {
+            clearInterval(skylightTimers[side].intervalId);
+            skylightTimers[side].intervalId = null;
+          }
+          if (skylightTimers[side].timeoutId) {
+            clearTimeout(skylightTimers[side].timeoutId);
+            skylightTimers[side].timeoutId = null;
+          }
+          skylightTimers[side].cancelFlag = true;
+          
+          // 현재 모드 OFF
+          const currentMode = currentAction === 'open' ? openMode : closeMode;
+          await fetch(`${API_SERVER}/api/settings/${currentMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 0 })
+          });
+          
+          // 오토모드 ON
+          await fetch(`${API_SERVER}/api/settings/${autoMode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: 1 })
+          });
+          
+          // UI 업데이트
+          statusEl.textContent = '자동 제어';
+          chipEl.textContent = '자동';
+          chipEl.classList.remove('manual');
+          chipEl.classList.add('auto');
+          
+          // 버튼 원래대로 복구
+          footer.innerHTML = `
+            <button class="skylight-btn open-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'open')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔼 열기
+            </button>
+            <button class="skylight-btn close-btn" 
+                    data-auto="${autoMode}"
+                    data-open="${openMode}"
+                    data-close="${closeMode}"
+                    onclick="operateSkylight(this, '${side}', 'close')" 
+                    style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+              🔽 닫기
+            </button>
+          `;
+          
+          card.setAttribute('data-current-action', '');
+          console.log(`✅ 천창 ${side}: 중단 완료 (자동 모드 복귀)`);
+          
+        } catch (error) {
+          console.error(`❌ 천창 ${side} 중단 에러:`, error);
+          alert(`❌ 천창 중단 실패: ${error.message}`);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="사이드바 토글">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="brand"><span>🌱</span>AISEED FARM ONE</div>
+        <nav>
+          <ul>
+            <li class="active"><a href="index.html"><div class="icon">📊</div><span>데시보드</span></a></li>
+            <li><a href="sensor-monitor.html"><div class="icon">🛰️</div><span>센서 모니터</span></a></li>
+            <li><a href="monitoring.html"><div class="icon">📹</div><span>모니터링</span></a></li>
+            <li><a href="control-schedule.html"><div class="icon">🧭</div><span>제어 스케줄</span></a></li>
+            <li><a href="notifications.html"><div class="icon">🔔</div><span>알림 센터</span></a></li>
+            <li><a href="reports.html"><div class="icon">🗂️</div><span>리포트 & 로그</span></a></li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          실시간 데이터 수집 <strong>ON</strong><br />
+          최근 업데이트: 오늘 오후 08:51
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>스마트팜 데시보드</h1>
+            <p id="current-date-info">-- · 실시간 업데이트 · 나주 대실마을 온실 A동</p>
+          </div>
+        </header>
+
+        <main class="content">
+          <section class="hero-grid">
+            <article class="card status-card">
+              <div class="status-main">
+                <h3>나주 대실마을 온실 · 운영중</h3>
+                <div class="meta">
+                  전라남도 나주시 · <span id="weather-status">--</span> · <span id="feels-like-temp">--</span>℃<br />
+                  마지막 점검: <span id="last-check">--</span> · 담당자: <span id="manager">--</span>
+                </div>
+                <div class="tags">
+                  <span class="tag">내일 예상: <span id="forecast">--</span></span>
+                  <span class="tag">시스템 상태: <span id="system-status">--</span></span>
+                  <span class="tag">관수 스케줄: <span id="irrigation-schedule">--</span></span>
+                </div>
+              </div>
+              <div class="status-side">
+                <div class="mini-card">
+                  <div>
+                    <strong>에너지 사용량</strong>
+                    <span><span id="energy-today">--</span> kWh · 어제 대비 <span id="energy-diff">--</span></span>
+                  </div>
+                  <div class="chip"><span id="energy-mode">--</span></div>
+                </div>
+                <div class="mini-card">
+                  <div>
+                    <strong>관측 장비</strong>
+                    <span><span id="sensor-count">--</span>개 센서 연결 · 오류 <span id="sensor-errors">--</span>건</span>
+                  </div>
+                  <div class="chip">Live</div>
+                </div>
+              </div>
+              <!-- 가식적 데이터 주석 (나중에 API로 매핑 예정)
+              전라남도 나주시 · 🌤 맑음 · 체감 21℃
+              마지막 점검 08:51 · 담당자 김현수
+              내일 예상: 구름 많음 · 20℃
+              시스템 상태 정상
+              관수 스케줄 D-1
+              금일 48.2 kWh · 어제 대비 7% 절감
+              17개 센서 연결 · 오류 0건
+              Eco 모드
+              -->
+            </article>
+            <article class="card">
+              <h2>작업 캘린더</h2>
+              <ul style="margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; font-size: 13px; color: var(--text-soft);" id="work-calendar-list">
+                <li><strong style="color: var(--text-strong);">--</strong> 작업 정보 없음</li>
+              </ul>
+              <!-- 가식적 데이터 주석
+              <li><strong style="color: var(--text-strong);">D-1</strong> 관수 라인 필터 세척 · 담당자 박유진</li>
+              <li><strong style="color: var(--text-strong);">D-3</strong> 온실 내부 점검 · 주기 7일 · 완료율 60%</li>
+              <li><strong style="color: var(--text-strong);">D-5</strong> 양액 배합 교체 · 자동 예약</li>
+              -->
+            </article>
+            <article class="card">
+              <h2>재배 환경 목표</h2>
+              <div style="display: grid; gap: 12px; font-size: 13px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">내부 온도 <span style="color: var(--text-strong);"><span id="target-temp">--</span>℃ ±<span id="target-temp-tolerance">--</span></span></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">내부 습도 <span style="color: var(--text-strong);"><span id="target-humidity">--</span>% ±<span id="target-humidity-tolerance">--</span></span></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">일사량 <span style="color: var(--text-strong);"><span id="target-solar">--</span> W/㎡</span></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">토양 함수율 <span style="color: var(--text-strong);"><span id="target-soil-moisture">--</span>% · 하한 <span id="target-soil-moisture-min">--</span>%</span></div>
+              </div>
+              <!-- 가식적 데이터 주석
+              내부 온도: 23℃ ±1.5
+              내부 습도: 68% ±5
+              일사량: 450 W/㎡
+              토양 함수율: 38% · 하한 32%
+              -->
+            </article>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>실시간 센서 데이터 · 내부 센서</h2>
+              <span>최근 갱신: <span id="last-update-time">--</span> · 정상: <span id="normal-count">--</span> · 주의: <span id="warning-count">--</span></span>
+            </div>
+            <div class="sensor-grid">
+              <article class="sensor-card" data-state="normal" data-sensor="indoor_temp">
+                <header>
+                  <div class="emoji">🌡️</div>
+                  <div>
+                    <h3>내부 온도</h3>
+                    <small style="color: var(--text-soft);">센서 ID · INT-TEMP-01</small>
+                  </div>
+                </header>
+                <div class="value">-- ℃</div>
+                <span class="status-chip">--</span>
+                <footer>마지막 업데이트 · --</footer>
+              </article>
+
+              <article class="sensor-card" data-state="normal" data-sensor="indoor_humidity">
+                <header>
+                  <div class="emoji">💧</div>
+                  <div>
+                    <h3>내부 습도</h3>
+                    <small style="color: var(--text-soft);">센서 ID · INT-HUM-01</small>
+                  </div>
+                </header>
+                <div class="value">-- %</div>
+                <span class="status-chip">--</span>
+                <footer>마지막 업데이트 · --</footer>
+              </article>
+
+              <article class="sensor-card" data-state="normal" data-sensor="indoor_solar">
+                <header>
+                  <div class="emoji">🔆</div>
+                  <div>
+                    <h3>실내 일사량</h3>
+                    <small style="color: var(--text-soft);">센서 ID · INT-SOLAR-02</small>
+                  </div>
+                </header>
+                <div class="value">-- W/㎡</div>
+                <span class="status-chip">--</span>
+                <footer>마지막 업데이트 · --</footer>
+              </article>
+
+              <article class="sensor-card" data-state="warning" data-sensor="indoor_moisture">
+                <header>
+                  <div class="emoji">🌱</div>
+                  <div>
+                    <h3>토양 수분 함수율</h3>
+                    <small style="color: var(--text-soft);">센서 ID · SOIL-MOIST-05</small>
+                  </div>
+                </header>
+                <div class="value">-- %</div>
+                <span class="status-chip">--</span>
+                <footer>관수 스케줄 · <span id="irrigation-adjust">--</span></footer>
+              </article>
+
+              <article class="sensor-card" data-state="normal" data-sensor="indoor_soil_tension">
+                <header>
+                  <div class="emoji">🧪</div>
+                  <div>
+                    <h3>토양 수분 장력</h3>
+                    <small style="color: var(--text-soft);">센서 ID · SOIL-TENSION-02</small>
+                  </div>
+                </header>
+                <div class="value">-- kPa</div>
+                <span class="status-chip">--</span>
+                <footer>임계치: <span id="soil-tension-threshold">--</span> kPa · <span id="soil-tension-action">--</span></footer>
+              </article>
+              <!-- 가식적 데이터 주석
+              정상 범위, 안정 유지, 목표 달성, 양호
+              주의 · 목표 상회
+              관수 스케줄 · 2시간 후 자동 조정
+              임계치: 35 kPa · 조치 없음
+              -->
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>외부 센서 요약</h2>
+              <span>메인 하우스 주변 관측</span>
+            </div>
+            <div class="outer-sensors">
+              <div class="item" data-sensor="outdoor_temp">
+                <span class="label">외부 온도</span>
+                <span class="value">-- ℃</span>
+                <small style="color: var(--text-soft);">어제 대비 --</small>
+              </div>
+              <div class="item" data-sensor="outdoor_humidity">
+                <span class="label">외부 습도</span>
+                <span class="value">-- %</span>
+                <small style="color: var(--text-soft);">목표: <span id="target-outdoor-humidity">--</span></small>
+              </div>
+              <div class="item" data-sensor="outdoor_solar">
+                <span class="label">외부 일사량</span>
+                <span class="value">-- W/㎡</span>
+                <small style="color: var(--text-soft);">자연광 충분</small>
+              </div>
+              <div class="item">
+                <span class="label">외부 풍향 · 풍속</span>
+                <span class="value"><span data-sensor="outdoor_wind_dir">--</span>° · <span data-sensor="outdoor_wind_speed">--</span> m/s</span>
+                <small style="color: var(--text-soft);">남서풍 · 안정</small>
+              </div>
+              <div class="item">
+                <span class="label">감우(비 감지)</span>
+                <span class="value">OFF</span>
+                <small style="color: var(--text-soft);">최근 강우 없음</small>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>제어 장치 상태</h2>
+              <span>자동 제어 비율: <span id="auto-control-ratio">--</span>% · 원격 제어 가능</span>
+            </div>
+            <div class="control-grid">
+              <article class="control-card" data-device="관수" data-control="irrigation">
+                <header>
+                  <div class="title">
+                    <strong>관수</strong>
+                    <span>자동 제어</span>
+                  </div>
+                  <div class="toggle off" data-mode="자동" 
+                       data-auto="irrigation_auto_mode" 
+                       data-forced="irrigation_forced_operation"
+                       onclick="toggleControl(this, '관수')"></div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer>
+                  <span>스케줄 대기 중</span>
+                  <span style="color: var(--text-soft);" class="status-text">OFF</span>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="난방" data-control="heating">
+                <header>
+                  <div class="title">
+                    <strong>난방</strong>
+                    <span>자동 제어</span>
+                  </div>
+                  <div class="toggle off" data-mode="자동" 
+                       data-auto="heating_auto_mode" 
+                       data-forced="heating_forced_operation"
+                       onclick="toggleControl(this, '난방')"></div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer>
+                  <span>온도 모니터링 중</span>
+                  <span style="color: var(--text-soft);" class="status-text">OFF</span>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="유동팬" data-control="circulation_fan">
+                <header>
+                  <div class="title">
+                    <strong>유동팬</strong>
+                    <span>자동 제어</span>
+                  </div>
+                  <div class="toggle off" data-mode="자동" 
+                       data-auto="circulation_fan_auto_mode" 
+                       data-forced="circulation_fan_forced_operation"
+                       onclick="toggleControl(this, '유동팬')"></div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer>
+                  <span>온도 균일화 중</span>
+                  <span style="color: var(--text-soft);" class="status-text">OFF</span>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="제습기" data-control="dehumidifier">
+                <header>
+                  <div class="title">
+                    <strong>제습기</strong>
+                    <span>자동 제어</span>
+                  </div>
+                  <div class="toggle off" data-mode="자동" 
+                       data-auto="dehumidifier_auto_mode" 
+                       data-forced="dehumidifier_forced_operation"
+                       onclick="toggleControl(this, '제습기')"></div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer>
+                  <span>습도 모니터링 중</span>
+                  <span style="color: var(--text-soft);" class="status-text">OFF</span>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="LED조명" data-control="lighting">
+                <header>
+                  <div class="title">
+                    <strong>LED조명</strong>
+                    <span>자동 제어</span>
+                  </div>
+                  <div class="toggle off" data-mode="자동" 
+                       data-auto="lighting_auto_mode" 
+                       data-forced="lighting_forced_operation"
+                       onclick="toggleControl(this, 'LED조명')"></div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer>
+                  <span>조도 모니터링 중</span>
+                  <span style="color: var(--text-soft);" class="status-text">OFF</span>
+                </footer>
+              </article>
+              <!-- 가식적 데이터 주석 (나중에 제어 API로 매핑 예정)
+              마지막 작동 08:20 · 자동 모드
+              다음 예약: 오늘 12:30
+              마지막 작동 07:29 · 수동 모드
+              권장 온도 도달
+              현재 속도 45% · 온도 균일화
+              내부 온도 편차 1.1℃
+              마지막 작동 08:21 · 자동 모드
+              습도 68% · 정상 범위
+              보정 모드 · 일사 보조
+              밝기 70% · 자정 자동 종료
+              -->
+
+              <article class="control-card" data-device="천창좌측" data-control="left_skylight" data-current-action="">
+                <header>
+                  <div class="title">
+                    <strong>천창 좌측</strong>
+                    <span class="skylight-status">자동 제어</span>
+                  </div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer style="display: flex; gap: 8px; justify-content: center;">
+                  <button class="skylight-btn open-btn" 
+                          data-auto="left_auto_mode"
+                          data-open="left_open_mode"
+                          data-close="left_close_mode"
+                          onclick="operateSkylight(this, '좌측', 'open')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔼 열기
+                  </button>
+                  <button class="skylight-btn close-btn" 
+                          data-auto="left_auto_mode"
+                          data-open="left_open_mode"
+                          data-close="left_close_mode"
+                          onclick="operateSkylight(this, '좌측', 'close')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔽 닫기
+                  </button>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="천창우측" data-control="right_skylight" data-current-action="">
+                <header>
+                  <div class="title">
+                    <strong>천창 우측</strong>
+                    <span class="skylight-status">자동 제어</span>
+                  </div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer style="display: flex; gap: 8px; justify-content: center;">
+                  <button class="skylight-btn open-btn" 
+                          data-auto="right_auto_mode"
+                          data-open="right_open_mode"
+                          data-close="right_close_mode"
+                          onclick="operateSkylight(this, '우측', 'open')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔼 열기
+                  </button>
+                  <button class="skylight-btn close-btn" 
+                          data-auto="right_auto_mode"
+                          data-open="right_open_mode"
+                          data-close="right_close_mode"
+                          onclick="operateSkylight(this, '우측', 'close')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔽 닫기
+                  </button>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="천장보온커튼" data-control="upper_insulation" data-current-action="">
+                <header>
+                  <div class="title">
+                    <strong>천장 보온커튼</strong>
+                    <span class="skylight-status">자동 제어</span>
+                  </div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer style="display: flex; gap: 8px; justify-content: center;">
+                  <button class="skylight-btn open-btn" 
+                          data-auto="upper_insulation_curtain_auto_mode"
+                          data-open="upper_insulation_curtain_open_mode"
+                          data-close="upper_insulation_curtain_close_mode"
+                          onclick="operateSkylight(this, '천장보온', 'open')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔼 열기
+                  </button>
+                  <button class="skylight-btn close-btn" 
+                          data-auto="upper_insulation_curtain_auto_mode"
+                          data-open="upper_insulation_curtain_open_mode"
+                          data-close="upper_insulation_curtain_close_mode"
+                          onclick="operateSkylight(this, '천장보온', 'close')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔽 닫기
+                  </button>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="측면보온커튼" data-control="side_insulation" data-current-action="">
+                <header>
+                  <div class="title">
+                    <strong>측면 보온커튼</strong>
+                    <span class="skylight-status">자동 제어</span>
+                  </div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer style="display: flex; gap: 8px; justify-content: center;">
+                  <button class="skylight-btn open-btn" 
+                          data-auto="side_insulation_curtain_auto_mode"
+                          data-open="side_insulation_curtain_open_mode"
+                          data-close="side_insulation_curtain_close_mode"
+                          onclick="operateSkylight(this, '측면보온', 'open')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔼 열기
+                  </button>
+                  <button class="skylight-btn close-btn" 
+                          data-auto="side_insulation_curtain_auto_mode"
+                          data-open="side_insulation_curtain_open_mode"
+                          data-close="side_insulation_curtain_close_mode"
+                          onclick="operateSkylight(this, '측면보온', 'close')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔽 닫기
+                  </button>
+                </footer>
+              </article>
+
+              <article class="control-card" data-device="천장차광커튼" data-control="shading_curtain" data-current-action="">
+                <header>
+                  <div class="title">
+                    <strong>천장 차광커튼</strong>
+                    <span class="skylight-status">자동 제어</span>
+                  </div>
+                </header>
+                <div class="chip auto">자동</div>
+                <footer style="display: flex; gap: 8px; justify-content: center;">
+                  <button class="skylight-btn open-btn" 
+                          data-auto="shading_curtain_auto_mode"
+                          data-open="shading_curtain_open_mode"
+                          data-close="shading_curtain_close_mode"
+                          onclick="operateSkylight(this, '차광', 'open')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #4ecca3; background: transparent; color: #4ecca3; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔼 열기
+                  </button>
+                  <button class="skylight-btn close-btn" 
+                          data-auto="shading_curtain_auto_mode"
+                          data-open="shading_curtain_open_mode"
+                          data-close="shading_curtain_close_mode"
+                          onclick="operateSkylight(this, '차광', 'close')" 
+                          style="flex: 1; padding: 8px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                    🔽 닫기
+                  </button>
+                </footer>
+              </article>
+              <!-- 가식적 데이터 주석
+              마지막 작동 08:15 · 자동 모드
+              농장 상태 정상
+              마지막 작동 07:50 · 자동 모드
+              커튼 닫힘 상태
+              마지막 작동 08:10 · 자동 모드
+              온도 25℃ 유지 중
+              온도 조절 완료
+              마지막 작동 07:45 · 자동 모드
+              측면 환기 정상
+              측면 단열 완료
+              마지막 작동 06:30 · 자동 모드
+              일사량 정상 범위
+              차광 효과 유지
+              -->
+            </div>
+          </section>
+
+          <div class="dashboard-bottom">
+            <article class="chart-card">
+              <div class="chart-header">
+                <h3>환경 지표 추세 (24시간)</h3>
+                <div class="tabs">
+                  <span class="active">온도</span>
+                  <span>습도</span>
+                  <span>일사량</span>
+                  <span>토양</span>
+                </div>
+              </div>
+              <div class="chart-placeholder" style="position: relative; height: 300px;">
+                <canvas id="envChart"></canvas>
+              </div>
+              <div class="chart-legend">
+                <span><span class="dot"></span>내부 센서</span>
+                <span><span class="dot alt"></span>외부 센서</span>
+                <span><span class="dot alert"></span>주의 구간</span>
+              </div>
+            </article>
+
+            <aside class="ai-panel">
+              <header>
+                <h3>AI 제어 제안</h3>
+                <span class="badge">Smart Advisor</span>
+              </header>
+              <div id="ai-suggestions-list">
+                <article class="ai-item">
+                  <p style="color: var(--text-soft);">AI 제안이 없습니다</p>
+                </article>
+              </div>
+              <!-- 가식적 데이터 주석 (나중에 AI API로 매핑 예정)
+              <article class="ai-item">
+                <strong>관수량 조정 추천</strong>
+                <p>토양 수분 함수율이 목표 상한을 경미하게 초과했습니다. 관수량을 12% 줄이고, 다음 사이클을 자동으로 재평가하세요.</p>
+                <div class="actions">
+                  <span>즉시 적용</span>
+                  <span>나중에</span>
+                </div>
+              </article>
+              <article class="ai-item">
+                <strong>환기 패턴 최적화</strong>
+                <p>외부 풍향·풍속을 기반으로 개폐창을 좌측 5% 추가 개방하면 내부 온도 편차를 0.4℃ 줄일 수 있습니다.</p>
+                <div class="actions">
+                  <span>자동 튜닝</span>
+                  <span>제안 숨기기</span>
+                </div>
+              </article>
+              <article class="ai-item">
+                <strong>예방 점검 알림</strong>
+                <p>유동 팬 베어링 진동 수치가 평소 대비 12% 상승했습니다. 48시간 내 점검을 권장합니다.</p>
+                <div class="actions">
+                  <span>작업 생성</span>
+                  <span>무시</span>
+                </div>
+              </article>
+              -->
+            </aside>
+          </div>
+        </main>
+
+        <footer>© 2025 AISEED FARM ONE · 실증 서비스 버전 0.9.3</footer>
+      </div>
+    </div>
+    <!-- <script src="auth.js"></script> --> <!-- 인증 비활성화 -->
+    <script src="script.js"></script>
+  </body>
+</html>
