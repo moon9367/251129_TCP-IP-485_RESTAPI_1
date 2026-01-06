@@ -43,7 +43,7 @@ python rest_api_server.py
 
 ### 3️⃣ 연결 정보
 
-- **Modbus TCP 주소**: 168.131.153.52:9139 - (각 장치에 따른 IP변경경)
+- **Modbus TCP 주소**: aiseednaju.iptime.org:9139 (DDNS) - IP: 168.131.153.52 (참고용)
 - **Unit ID**: 1
 - **총 제어 항목**: 223개
 
@@ -454,13 +454,13 @@ GET /api/sensors/all
 
 ### 🟡 네트워크 설정
 
-- **Modbus TCP**: `168.131.153.52:9139`
+- **Modbus TCP**: `aiseednaju.iptime.org:9139` (DDNS)
 - **REST API**: `localhost:8000`
 - **변경 필요 시**: `rest_api_server.py` 파일 수정
   ```python
   controller = ModbusController(
-      host="168.131.153.52",  # 여기 수정
-      port=9139,               # 여기 수정
+      host="aiseednaju.iptime.org",  # DDNS 주소 (또는 IP: 168.131.153.52)
+      port=9139,
       unit_id=1
   )
   ```

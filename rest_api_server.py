@@ -198,7 +198,7 @@ async def startup_event():
     
     # Modbus 컨트롤러 생성 및 연결
     controller = ModbusController(
-        host="168.131.153.52",
+        host="aiseednaju.iptime.org",
         port=9139,
         unit_id=1
     )

@@ -4,13 +4,13 @@ Modbus TCP 센서 읽기/쓰기 핵심 가이드
 
 1. 연결 설정
 ================================================================================
-IP = "168.131.153.52"  또는  "aiseednaju.iptime.org"
+HOST = "aiseednaju.iptime.org"  # DDNS 주소 (또는 IP: 168.131.153.52)
 PORT = 9139
 UNIT_ID = 1
 
 from pymodbus.client import ModbusTcpClient
 
-client = ModbusTcpClient(host=IP, port=PORT, timeout=5, retries=3)
+client = ModbusTcpClient(host=HOST, port=PORT, timeout=5, retries=3)
 client.connect()
 
 
@@ -156,7 +156,7 @@ new = current & ~(1 << 5)  # 5번 비트를 0으로
 from pymodbus.client import ModbusTcpClient
 import time
 
-client = ModbusTcpClient(host="168.131.153.52", port=9139)
+client = ModbusTcpClient(host="aiseednaju.iptime.org", port=9139)
 client.connect()
 
 while True:
@@ -178,7 +178,7 @@ client.close()
 ------------------------
 from pymodbus.client import ModbusTcpClient
 
-client = ModbusTcpClient(host="168.131.153.52", port=9139)
+client = ModbusTcpClient(host="aiseednaju.iptime.org", port=9139)
 client.connect()
 
 # 우측 열기 ON (주소 20, 비트 14)

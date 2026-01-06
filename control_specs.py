@@ -23,7 +23,7 @@ CONTROL_SPECS = {
     # ========================================================================
     # Word Address 0~4: Basic Settings
     # ========================================================================
-
+    
     "io_board_station_number": {
         "korean_name": "IO보드국번",
         "type": "REGISTER_WRITE",
@@ -326,11 +326,11 @@ CONTROL_SPECS = {
         "unit": "분",
         "description": "관수 시작시각(분) (관수시작분)"
     },
-
+    
     # ========================================================================
     # Word Address 14~17: Heating
     # ========================================================================
-
+    
     "heating_on_humidity_setting": {
         "korean_name": "난방ON습도설정",
         "type": "BIT_RANGE_WRITE",
@@ -2030,7 +2030,7 @@ CONTROL_SPECS = {
         "unit": "kPa",
         "description": "내부 현재 수분장력 (내부현재수분장력)"
     },
-
+    
     "outdoor_current_temperature": {
         "korean_name": "외부현재온도",
         "type": "SENSOR_READ",
@@ -2114,7 +2114,7 @@ CONTROL_SPECS = {
         "scale": 1,
         "unit": "초",
         "description": "차광커튼 현재 이동량 (차광커튼이동량)"
-    }
+}
 
 }
 
